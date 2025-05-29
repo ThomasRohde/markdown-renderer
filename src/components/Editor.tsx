@@ -123,11 +123,10 @@ export const Editor: React.FC = () => {
             <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
               {charCount} chars • {wordCount} words
             </div>
-          </div>
-          <div className="flex items-center space-x-2">
+          </div>          <div className="flex items-center space-x-2">
             <button
               onClick={() => setShowPreview(!showPreview)}
-              className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2"
+              className="btn-secondary text-xs sm:text-sm py-2 px-3 min-h-[36px] flex items-center justify-center"
             >
               {showPreview ? 'Edit' : 'Preview'}
             </button>
@@ -156,40 +155,38 @@ export const Editor: React.FC = () => {
       </div>
 
       <div className="border-t border-gray-200 dark:border-gray-700 px-3 sm:px-6 py-3 sm:py-4">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
-          <div className="flex flex-wrap items-center gap-2 justify-center sm:justify-start">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">          <div className="flex flex-wrap items-center gap-2 justify-center sm:justify-start">
             <button
               onClick={handleGenerateLink}
               disabled={isGenerating || !content.trim()}
-              className="btn-primary text-xs sm:text-sm py-1.5 sm:py-2"
+              className="btn-primary text-xs sm:text-sm py-2 px-4 min-h-[44px] flex items-center justify-center"
             >
               {isGenerating ? 'Generating...' : 'Generate Link'}
             </button>
             <button
               onClick={handleClear}
-              className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2"
+              className="btn-secondary text-xs sm:text-sm py-2 px-3 min-h-[44px] flex items-center justify-center"
             >
               Clear
             </button>
             <button
               onClick={handleLoadExample}
-              className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2"
+              className="btn-secondary text-xs sm:text-sm py-2 px-3 min-h-[44px] flex items-center justify-center"
             >
               Load Example
             </button>
           </div>
           
-          {generatedLink && (
-            <div className="flex items-center space-x-2 justify-center sm:justify-end">
+          {generatedLink && (            <div className="flex items-center space-x-2 justify-center sm:justify-end">
               <input
                 type="text"
                 value={generatedLink}
                 readOnly
-                className="px-2 sm:px-3 py-1 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-xs sm:text-sm w-full sm:w-64 truncate"
+                className="px-2 sm:px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-xs sm:text-sm w-full sm:w-64 truncate min-h-[36px]"
               />
               <button
                 onClick={() => navigator.clipboard.writeText(generatedLink)}
-                className="btn-small text-xs sm:text-sm py-1 whitespace-nowrap"
+                className="btn-small text-xs sm:text-sm py-2 px-3 whitespace-nowrap min-h-[36px] flex items-center justify-center"
               >
                 Copy
               </button>

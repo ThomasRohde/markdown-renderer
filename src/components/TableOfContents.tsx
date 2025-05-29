@@ -57,30 +57,28 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({ items, isOpen,
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
         </svg>
-      </button>
-
-      {/* TOC Panel - Enhanced for mobile */}
+      </button>      {/* TOC Panel - iOS styled for mobile */}
       {isOpen && (
         <div className={`
           fixed sm:left-4 sm:top-16 sm:bottom-16 sm:w-64 
-          ${isMobile ? 'inset-x-0 bottom-0 top-auto max-h-[80vh] rounded-t-xl' : 'inset-y-0 inset-x-0 sm:inset-auto sm:rounded-lg'}
+          ${isMobile ? 'inset-x-0 bottom-0 top-auto max-h-[80vh] rounded-t-2xl' : 'inset-y-0 inset-x-0 sm:inset-auto sm:rounded-lg'}
           bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 
-          shadow-lg z-30 overflow-hidden flex flex-col
-        `}>
-          {/* Drag handle for mobile */}
+          shadow-xl z-30 overflow-hidden flex flex-col
+          ${isMobile ? 'pb-safe' : ''}
+        `} style={isMobile ? {boxShadow: '0 -8px 30px rgba(0, 0, 0, 0.12)'} : {}}>
+          {/* Drag handle for mobile - iOS style */}
           {isMobile && (
             <div className="w-full h-1.5 flex items-center justify-center p-3">
-              <div className="w-12 h-1 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+              <div className="w-14 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
             </div>
           )}
-        
-          <div className="p-3 sm:p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+          <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+            <h3 className="text-base font-semibold text-gray-900 dark:text-white">
               Table of Contents
             </h3>
             <button
               onClick={onToggle}
-              className="btn-icon sm:hidden p-1"
+              className="btn-icon sm:hidden p-2"
               aria-label="Close table of contents"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

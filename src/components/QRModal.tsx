@@ -55,9 +55,9 @@ export const QRModal: React.FC<QRModalProps> = ({ isOpen, onClose, url, title = 
   };
 
   if (!isOpen) return null;
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-      <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-4 sm:p-6 shadow-xl">
+  return (    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4 backdrop-blur-md">
+      <div className="bg-white dark:bg-gray-800 rounded-xl max-w-md w-full p-4 sm:p-6 shadow-2xl" 
+        style={{boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 0 10px -5px rgba(0, 0, 0, 0.04)'}}>
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
             {title}

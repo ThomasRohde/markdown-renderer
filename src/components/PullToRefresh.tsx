@@ -19,19 +19,23 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   if (!isPulling && !isRefreshing) {
     return null;
   }
-  
-  return (
+    return (
     <div 
-      className="fixed top-0 left-0 right-0 z-50 flex justify-center transition-transform duration-300 ease-out"
+      className="fixed top-0 left-0 right-0 z-50 flex justify-center transition-transform duration-300 ease-out pt-safe"
       style={{ transform: `translateY(${pullDistance}px)` }}
     >
-      <div className="bg-white dark:bg-gray-800 rounded-full shadow-lg p-2 mx-auto flex items-center justify-center">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-3 mx-auto flex items-center justify-center border border-gray-200 dark:border-gray-700"
+           style={{
+             backdropFilter: 'blur(20px)',
+             WebkitBackdropFilter: 'blur(20px)',
+             backgroundColor: 'rgba(255, 255, 255, 0.9)',
+           }}>
         {isRefreshing ? (
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-7 w-7 border-b-2 border-blue-600"></div>
         ) : (
-          <div className="relative h-6 w-6">
+          <div className="relative h-7 w-7">
             {/* Progress circle */}
-            <svg className="w-6 h-6 transform rotate-270" viewBox="0 0 24 24">
+            <svg className="w-7 h-7 transform rotate-270" viewBox="0 0 24 24">
               <circle
                 className="text-gray-200 dark:text-gray-700"
                 cx="12"
@@ -57,7 +61,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
             {/* Arrow icon changes when pulled enough */}
             {progress >= 100 ? (
               <svg
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-blue-600"
+                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 text-blue-600"
                 fill="none"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -69,7 +73,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
               </svg>
             ) : (
               <svg
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-blue-600"
+                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 text-blue-600"
                 fill="none"
                 strokeLinecap="round"
                 strokeLinejoin="round"

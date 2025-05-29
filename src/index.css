@@ -137,6 +137,9 @@ button,
 .btn-icon {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none; /* Prevents iOS callout menu */
+  -webkit-user-select: none; /* Safari */
+  user-select: none;
 }
 
 /* Add active states for better mobile touch feedback */
@@ -144,7 +147,8 @@ button,
 .btn-secondary:active,
 .btn-small:active,
 .btn-icon:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
+  opacity: 0.9;
 }
 
 /* Touch feedback animations */
@@ -345,6 +349,96 @@ button,
   transform: scale(1.05) translateY(-2px);
 }
 
+/* iOS-specific icon improvements */
+@supports (-webkit-touch-callout: none) {
+  .app-icon {
+    /* iOS-specific styling for app icon */
+    box-shadow: 0 3px 8px rgba(59, 130, 246, 0.2), 0 0 0 1px rgba(59, 130, 246, 0.1);
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+  }
+  
+  /* Better tap target size for iOS */
+  button.btn-icon {
+    padding: 12px;
+    margin: 2px;
+  }
+  
+  /* Improve iOS button active states */
+  .btn-primary:active,
+  .btn-secondary:active,
+  .btn-small:active {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
+}
+
+/* Enhanced iOS-specific styles for remaining components */
+@supports (-webkit-touch-callout: none) {
+  /* iOS-specific pull-to-refresh styling */
+  .fixed.top-0.left-0.right-0 div:first-child {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Enhanced splash screen for iOS */
+  .fixed.inset-0.bg-gradient-to-br {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  
+  /* iOS-style install prompt styling */
+  .fixed.bottom-4.left-4.right-4 {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  /* Improve install prompt button touch targets */
+  .btn-install-primary,
+  .btn-install-ghost {
+    min-height: 44px;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    user-select: none;
+    transition: all 0.2s ease;
+  }
+  
+  .btn-install-primary:active,
+  .btn-install-ghost:active {
+    transform: scale(0.97);
+    opacity: 0.9;
+  }
+  
+  /* Enhanced textarea for better iOS experience */
+  textarea {
+    -webkit-appearance: none;
+    appearance: none;
+    resize: none;
+    -webkit-user-select: text;
+    user-select: text;
+  }
+  
+  /* iOS-style input field in editor */
+  input[type="text"] {
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 8px;
+  }
+  
+  /* Improve dark mode backdrop blur on iOS */
+  .dark .fixed.top-0.left-0.right-0 div:first-child {
+    background: rgba(31, 41, 55, 0.95);
+  }
+  
+  .dark .fixed.bottom-4.left-4.right-4 {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
 /* Prism.js syntax highlighting styles */
 .language-javascript, .language-js,
 .language-typescript, .language-ts,
@@ -508,7 +602,10 @@ button,
   @apply hover:bg-blue-700 active:bg-blue-800;
   @apply focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
   @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600;
-  @apply transition-all duration-200;
+  @apply transition-all duration-200 flex items-center justify-center;
+  /* iOS style improvements */
+  @apply min-h-[44px];
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .dark .btn-primary {
@@ -521,7 +618,10 @@ button,
   @apply hover:bg-blue-700 active:bg-blue-800;
   @apply focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
   @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600;
-  @apply transition-all duration-200;
+  @apply transition-all duration-200 flex items-center justify-center;
+  @apply min-h-[48px];
+  /* iOS-style subtle shadow */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 .dark .btn-primary-lg {
@@ -534,6 +634,10 @@ button,
   @apply border-gray-300 text-gray-700 bg-white hover:bg-gray-50;
   @apply focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
   @apply active:bg-gray-100;
+  @apply flex items-center justify-center;
+  /* iOS style improvements */
+  @apply min-h-[44px];
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
 .dark .btn-secondary {
@@ -548,6 +652,9 @@ button,
   @apply border-gray-300 text-gray-700 bg-white hover:bg-gray-50;
   @apply focus:ring-2 focus:ring-blue-500 focus:ring-offset-1;
   @apply active:bg-gray-100;
+  @apply min-h-[36px] flex items-center justify-center;
+  /* iOS style improvements */
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.03);
 }
 
 .dark .btn-small {
@@ -558,9 +665,10 @@ button,
 
 /* Icon buttons - for icon-only actions */
 .btn-icon {
-  @apply p-2 text-gray-500 hover:text-gray-700 rounded-md;
+  @apply p-3 text-gray-500 hover:text-gray-700 rounded-md;
   @apply focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
   @apply transition-colors duration-200;
+  @apply min-w-[44px] min-h-[44px] flex items-center justify-center;
 }
 
 .dark .btn-icon {
@@ -570,15 +678,18 @@ button,
 
 /* Large icon buttons - for prominent icon actions */
 .btn-icon-lg {
-  @apply w-10 h-10 flex items-center justify-center rounded-lg;
+  @apply w-12 h-12 flex items-center justify-center rounded-xl;
   @apply bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600;
   @apply text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700;
   @apply focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
-  @apply transition-all duration-200 shadow-sm hover:shadow-md;
+  @apply transition-all duration-200 shadow-md hover:shadow-lg;
+  /* iOS-style shadow */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.06), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.08);
 }
 
 .dark .btn-icon-lg {
   @apply focus:ring-offset-gray-800;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.15);
 }
 
 /* Ghost buttons - minimal styling */
@@ -827,7 +938,60 @@ button,
 
 /* Mobile Quick Actions Bar */
 .mobile-quick-action {
-  @apply flex flex-col items-center justify-center p-2 rounded-lg bg-gray-50 dark:bg-gray-700;
+  @apply flex flex-col items-center justify-center p-2.5 rounded-xl bg-gray-50 dark:bg-gray-700;
   @apply active:bg-gray-100 dark:active:bg-gray-600;
+  /* iOS style improvements */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
   @apply transition-colors duration-150;
+}
+
+/* iOS-specific overrides for buttons and icons */
+@supports (-webkit-touch-callout: none) {
+  /* Target iOS devices only */
+  
+  /* Improved button visuals for iOS */
+  .btn-primary, 
+  .btn-secondary,
+  .btn-small {
+    letter-spacing: -0.01em;
+    font-weight: 500;
+  }
+  
+  /* Enhance focus appearance on iOS */
+  button:focus {
+    outline: none;
+  }
+  
+  /* Improve touch response on mobile */
+  .mobile-quick-action {
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  
+  .mobile-quick-action:active {
+    transform: scale(0.96);
+    opacity: 0.9;
+  }
+  
+  /* iOS-style icon rendering */
+  svg {
+    shape-rendering: geometricPrecision;
+  }
+  
+  /* Match iOS's native button feel with proper padding in bottom sheets */
+  .fixed.bottom-0.left-0.right-0 button {
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  }
+  
+  /* Ensure proper safe area insets in landscape */
+  @media (orientation: landscape) {
+    .fixed.right-4 {
+      right: max(1rem, calc(1rem + env(safe-area-inset-right)));
+    }
+    
+    .fixed.left-4 {
+      left: max(1rem, calc(1rem + env(safe-area-inset-left)));
+    }
+  }
 }

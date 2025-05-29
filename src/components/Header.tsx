@@ -42,10 +42,9 @@ export const Header: React.FC<HeaderProps> = ({ isEditor, title }) => {
   };
   return (
     <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-4 py-3 sticky top-0 z-10">
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between">
-        <div className="flex items-center space-x-3 mb-3 sm:mb-0 w-full sm:w-auto justify-center sm:justify-start">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center app-icon shadow-md">
-            <span className="text-white font-bold text-lg">M</span>
+      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between">        <div className="flex items-center space-x-3 mb-3 sm:mb-0 w-full sm:w-auto justify-center sm:justify-start">
+          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center app-icon shadow-md">
+            <span className="text-white font-bold text-xl">M</span>
           </div>
           <div className="text-center sm:text-left">
             <h1 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white truncate max-w-[200px] sm:max-w-full">
