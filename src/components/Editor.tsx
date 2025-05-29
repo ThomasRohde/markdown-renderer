@@ -65,7 +65,6 @@ export const Editor: React.FC = () => {
       localStorage.removeItem('editContent');
     }
   }, []);
-
   const handleGenerateLink = useCallback(async () => {
     if (!content.trim()) {
       alert('Please enter some content first');
@@ -83,7 +82,11 @@ export const Editor: React.FC = () => {
       
       // Copy to clipboard
       await navigator.clipboard.writeText(link);
-      alert(`Link generated and copied to clipboard!\n\nSize: ${result.originalSize} → ${result.compressedSize} chars\nMethod: ${result.useFragment ? 'Fragment' : 'Query Parameter'}`);    } catch (err) {
+      
+      // Navigate to the generated URL
+      window.location.href = link;
+      
+    } catch (err) {
       console.error('Failed to generate link:', err);
       alert(error || 'Failed to generate link');
     } finally {
