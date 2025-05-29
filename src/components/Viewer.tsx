@@ -207,19 +207,7 @@ export const Viewer: React.FC<ViewerProps> = ({
                   <FileText className="w-6 h-6" />
                 }
               </button>
-              
-              {/* Table of Contents */}
-              <button
-                onClick={() => {
-                  setShowTOC(!showTOC); 
-                  setShowMobileActions(false);
-                }}
-                className={`flex flex-col items-center justify-center p-3 ${tableOfContents.length === 0 ? 'opacity-50' : ''}`}
-                disabled={tableOfContents.length === 0}
-              >
-                <List className="w-6 h-6" />
-              </button>
-              
+                         
               {/* Share QR */}
               <button
                 onClick={() => {
@@ -229,17 +217,6 @@ export const Viewer: React.FC<ViewerProps> = ({
                 className="flex flex-col items-center justify-center p-3"
               >
                 <Share2 className="w-6 h-6" />
-              </button>
-              
-              {/* Favorite */}
-              <button
-                onClick={handleToggleFavorite}
-                className={`flex flex-col items-center justify-center p-3 ${isFavorite ? 'text-yellow-600 dark:text-yellow-400' : ''}`}
-              >
-                <Star 
-                  className={`w-6 h-6 ${isFavorite ? 'fill-yellow-600 text-yellow-600 dark:fill-yellow-400 dark:text-yellow-400' : ''}`} 
-                  fill={isFavorite ? 'currentColor' : 'none'} 
-                />
               </button>
               
               {/* Reading Mode */}
