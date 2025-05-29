@@ -2,7 +2,7 @@ import React from 'react';
 import { usePWA } from '../hooks/usePWA';
 
 export const InstallPrompt: React.FC = () => {
-  const { canInstall, showInstallPrompt } = usePWA();
+  const { canInstall, showInstallPrompt, dismissInstallPrompt } = usePWA();
 
   const handleInstall = async () => {
     const success = await showInstallPrompt();
@@ -40,9 +40,8 @@ export const InstallPrompt: React.FC = () => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
           </svg>
           Install Now
-        </button>
-        <button
-          onClick={() => {/* Could implement dismiss logic */}}
+        </button>        <button
+          onClick={dismissInstallPrompt}
           className="btn-install-ghost"
         >
           Later
