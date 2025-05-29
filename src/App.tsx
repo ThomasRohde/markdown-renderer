@@ -2,10 +2,15 @@ import { useEffect, useState } from 'react';
 import { Header } from './components/Header';
 import { Editor } from './components/Editor';
 import { Viewer } from './components/Viewer';
+import { InstallPrompt } from './components/InstallPrompt';
+import { useTheme } from './hooks/useTheme';
 
 function App() {
   const [isEditor, setIsEditor] = useState(true);
   const [isReadingMode, setIsReadingMode] = useState(false);
+  
+  // Initialize theme hook to ensure dark class is applied to document
+  useTheme();
 
   useEffect(() => {
     // Determine if we should show editor or viewer based on URL parameters
@@ -36,6 +41,9 @@ function App() {
           />
         )}
       </main>
+      
+      {/* Install PWA Prompt */}
+      <InstallPrompt />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { useEncoding } from '../hooks/useEncoding';
 import { generateShareableLink, generateFragmentLink } from '../config/constants';
 import { renderMarkdown } from '../utils/markdown';
@@ -56,6 +56,16 @@ export const Editor: React.FC = () => {
   const [showPreview, setShowPreview] = useState(false);
   const { encode, error } = useEncoding();
 
+  // Check for stored content from viewer edit action
+  useEffect(() => {
+    const storedContent = localStorage.getItem('editContent');
+    if (storedContent) {
+      setContent(storedContent);
+      // Clear the stored content after using it
+      localStorage.removeItem('editContent');
+    }
+  }, []);
+
   const handleGenerateLink = useCallback(async () => {
     if (!content.trim()) {
       alert('Please enter some content first');
@@ -110,11 +120,10 @@ export const Editor: React.FC = () => {
             <div className="text-sm text-gray-500 dark:text-gray-400">
               {charCount} chars • {wordCount} words
             </div>
-          </div>
-          <div className="flex items-center space-x-2">
+          </div>          <div className="flex items-center space-x-2">
             <button
               onClick={() => setShowPreview(!showPreview)}
-              className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800"
+              className="btn-secondary"
             >
               {showPreview ? 'Edit' : 'Preview'}
             </button>
@@ -149,16 +158,15 @@ export const Editor: React.FC = () => {
               className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isGenerating ? 'Generating...' : 'Generate Link'}
-            </button>
-            <button
+            </button>            <button
               onClick={handleClear}
-              className="px-4 py-2 text-gray-600 dark:text-gray-400 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800"
+              className="btn-secondary"
             >
               Clear
             </button>
             <button
               onClick={handleLoadExample}
-              className="px-4 py-2 text-gray-600 dark:text-gray-400 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800"
+              className="btn-secondary"
             >
               Load Example
             </button>

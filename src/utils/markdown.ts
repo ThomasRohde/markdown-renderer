@@ -1,10 +1,83 @@
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
+import mermaid from 'mermaid';
+import Prism from 'prismjs';
+
+// Import common language syntaxes
+import 'prismjs/components/prism-javascript';
+import 'prismjs/components/prism-typescript';
+import 'prismjs/components/prism-jsx';
+import 'prismjs/components/prism-tsx';
+import 'prismjs/components/prism-python';
+import 'prismjs/components/prism-java';
+import 'prismjs/components/prism-json';
+import 'prismjs/components/prism-css';
+import 'prismjs/components/prism-bash';
+import 'prismjs/components/prism-sql';
+import 'prismjs/components/prism-yaml';
+
+// Initialize Mermaid
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'default',
+  securityLevel: 'strict',
+  flowchart: {
+    useMaxWidth: true,
+    htmlLabels: true,
+  },
+});
+
+// Custom renderer for code blocks with syntax highlighting
+const renderer = new marked.Renderer();
+
+// Add IDs to headings for table of contents navigation
+renderer.heading = function({ text, depth }: { text: string; depth: number }) {
+  const id = text.toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-');
+  
+  return `<h${depth} id="${id}">${text}</h${depth}>`;
+};
+
+renderer.code = function({ text, lang }: { text: string; lang?: string }) {
+  const language = lang || '';
+  
+  // Handle Mermaid diagrams
+  if (language === 'mermaid') {
+    const id = `mermaid-${Math.random().toString(36).substr(2, 9)}`;
+    // Queue the diagram for rendering after DOM insertion
+    setTimeout(() => {
+      const element = document.getElementById(id);
+      if (element) {
+        mermaid.render(`mermaid-svg-${id}`, text).then(({ svg }) => {
+          element.innerHTML = svg;
+        }).catch((error) => {
+          console.error('Mermaid rendering failed:', error);
+          element.innerHTML = `<pre class="mermaid-error"><code>${text}</code></pre>`;
+        });
+      }
+    }, 0);
+    return `<div class="mermaid-diagram" id="${id}">Loading diagram...</div>`;
+  }
+  
+  // Apply syntax highlighting for other languages
+  let highlightedCode = text;
+  if (language && Prism.languages[language]) {
+    try {
+      highlightedCode = Prism.highlight(text, Prism.languages[language], language);
+    } catch (err) {
+      console.warn('Syntax highlighting failed for language:', language, err);
+    }
+  }
+  
+  return `<pre class="language-${language}"><code class="language-${language}">${highlightedCode}</code></pre>`;
+};
 
 // Configure marked with GitHub-flavored markdown options
 marked.setOptions({
   breaks: true,
   gfm: true,
+  renderer: renderer,
 });
 
 /**
@@ -14,8 +87,7 @@ export function renderMarkdown(markdown: string): string {
   try {
     // Parse markdown to HTML
     const rawHtml = marked(markdown) as string;
-    
-    // Sanitize HTML to prevent XSS
+      // Sanitize HTML to prevent XSS
     const cleanHtml = DOMPurify.sanitize(rawHtml, {
       ALLOWED_TAGS: [
         'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
@@ -26,12 +98,20 @@ export function renderMarkdown(markdown: string): string {
         'table', 'thead', 'tbody', 'tr', 'th', 'td',
         'a', 'img',
         'del', 'ins',
-        'div', 'span'
+        'div', 'span',
+        // Mermaid diagram support
+        'svg', 'g', 'path', 'rect', 'circle', 'ellipse', 'line', 'polyline', 'polygon',
+        'text', 'tspan', 'defs', 'marker', 'use', 'clipPath'
       ],
       ALLOWED_ATTR: [
         'href', 'title', 'alt', 'src',
         'class', 'id',
-        'target', 'rel'
+        'target', 'rel',
+        // SVG attributes for Mermaid
+        'viewBox', 'width', 'height', 'x', 'y', 'x1', 'y1', 'x2', 'y2',
+        'cx', 'cy', 'r', 'rx', 'ry', 'points', 'fill', 'stroke', 'stroke-width',
+        'stroke-dasharray', 'transform', 'd', 'marker-end', 'marker-start',
+        'text-anchor', 'dominant-baseline', 'font-size', 'font-family'
       ],
       ALLOW_DATA_ATTR: false
     });

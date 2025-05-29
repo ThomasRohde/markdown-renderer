@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useEncoding } from '../hooks/useEncoding';
 import { useMarkdown } from '../hooks/useMarkdown';
+import { QRModal } from './QRModal';
+import { TableOfContents } from './TableOfContents';
 
 interface ViewerProps {
   isReadingMode?: boolean;
@@ -15,9 +17,12 @@ export const Viewer: React.FC<ViewerProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [showSource, setShowSource] = useState(false);
   const [originalMarkdown, setOriginalMarkdown] = useState('');
+  const [showQRModal, setShowQRModal] = useState(false);
+  const [showTOC, setShowTOC] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
   
   const { decode, getFromUrl } = useEncoding();
-  const { renderedHtml, title, render } = useMarkdown();
+  const { renderedHtml, title, tableOfContents, render } = useMarkdown();
   useEffect(() => {
     const loadDocument = async () => {
       const encoded = getFromUrl();
@@ -54,18 +59,34 @@ export const Viewer: React.FC<ViewerProps> = ({
       document.title = 'Document - Markdown Viewer';
     }
   }, [title]);
-
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      alert('Link copied to clipboard!');
+      // Could add a toast notification here
     } catch (err) {
       console.error('Failed to copy link:', err);
     }
   };
 
+  const handleShowQR = () => {
+    setShowQRModal(true);
+  };
+
+  const handleToggleFavorite = async () => {
+    // Implementation for toggling favorite status
+    try {
+      const newStatus = !isFavorite;
+      setIsFavorite(newStatus);
+      // Save to storage would go here
+    } catch (err) {
+      console.error('Failed to toggle favorite:', err);
+    }
+  };
   const handleEdit = () => {
-    // Navigate to editor with content
+    // Store the original markdown in localStorage for the editor to pick up
+    localStorage.setItem('editContent', originalMarkdown);
+    
+    // Navigate to editor
     const baseUrl = window.location.origin + window.location.pathname;
     window.location.href = baseUrl;
   };
@@ -117,23 +138,44 @@ export const Viewer: React.FC<ViewerProps> = ({
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-medium text-gray-900 dark:text-white">
               {title}
-            </h2>
-            <div className="flex items-center space-x-2">
+            </h2>            <div className="flex items-center space-x-2">
               <button
                 onClick={onToggleReadingMode}
-                className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800"
+                className="btn-secondary"
               >
                 Reading Mode
               </button>
               <button
                 onClick={() => setShowSource(!showSource)}
-                className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800"
+                className="btn-secondary"
               >
                 {showSource ? 'View Rendered' : 'View Source'}
               </button>
+              {tableOfContents.length > 0 && (
+                <button
+                  onClick={() => setShowTOC(!showTOC)}
+                  className="btn-secondary"
+                >
+                  TOC
+                </button>
+              )}
+              <button
+                onClick={handleToggleFavorite}
+                className={`btn-secondary ${isFavorite ? 'text-yellow-600 dark:text-yellow-400' : ''}`}
+                title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+              >
+                {isFavorite ? '★' : '☆'}
+              </button>
+              <button
+                onClick={handleShowQR}
+                className="btn-secondary"
+                title="Share via QR Code"
+              >
+                QR
+              </button>
               <button
                 onClick={handleCopyLink}
-                className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800"
+                className="btn-secondary"
               >
                 Copy Link
               </button>
@@ -158,10 +200,26 @@ export const Viewer: React.FC<ViewerProps> = ({
             <div 
               className="markdown-body max-w-none"
               dangerouslySetInnerHTML={{ __html: renderedHtml }}
-            />
-          </div>
+            />          </div>
         )}
       </div>
+
+      {/* Table of Contents */}
+      {!isReadingMode && (
+        <TableOfContents 
+          items={tableOfContents}
+          isOpen={showTOC}
+          onToggle={() => setShowTOC(!showTOC)}
+        />
+      )}
+
+      {/* QR Code Modal */}
+      <QRModal
+        isOpen={showQRModal}
+        onClose={() => setShowQRModal(false)}
+        url={window.location.href}
+        title={title}
+      />
     </div>
   );
 };
