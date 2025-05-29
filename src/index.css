@@ -341,35 +341,120 @@
   color: #ff7b72;
 }
 
-/* Improved button styling for better dark mode contrast */
+/* Standardized Button System */
+
+/* Primary buttons - for main actions */
+.btn-primary {
+  @apply px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-md;
+  @apply hover:bg-blue-700 active:bg-blue-800;
+  @apply focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600;
+  @apply transition-all duration-200;
+}
+
+.dark .btn-primary {
+  @apply focus:ring-offset-gray-800;
+}
+
+/* Primary large - for prominent actions */
+.btn-primary-lg {
+  @apply px-6 py-2.5 text-base font-medium bg-blue-600 text-white rounded-md;
+  @apply hover:bg-blue-700 active:bg-blue-800;
+  @apply focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600;
+  @apply transition-all duration-200;
+}
+
+.dark .btn-primary-lg {
+  @apply focus:ring-offset-gray-800;
+}
+
+/* Secondary buttons - for secondary actions */
 .btn-secondary {
-  @apply px-3 py-1 text-sm border rounded-md transition-colors duration-200;
+  @apply px-4 py-2 text-sm font-medium border rounded-md transition-all duration-200;
   @apply border-gray-300 text-gray-700 bg-white hover:bg-gray-50;
-  @apply focus:ring-2 focus:ring-blue-500 focus:ring-offset-1;
+  @apply focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  @apply active:bg-gray-100;
 }
 
 .dark .btn-secondary {
   @apply border-gray-500 text-gray-200 bg-gray-700 hover:bg-gray-600;
   @apply hover:border-gray-400 focus:ring-offset-gray-800;
+  @apply active:bg-gray-800;
 }
 
-.btn-secondary:hover {
-  @apply shadow-sm;
-}
-
-.dark .btn-secondary:hover {
-  @apply shadow-lg;
-}
-
-/* Enhanced visibility for small buttons in dark mode */
+/* Small buttons - for compact spaces */
 .btn-small {
-  @apply px-3 py-1 text-sm border rounded-md transition-all duration-200;
-  @apply border-gray-300 text-gray-600 bg-gray-50 hover:bg-gray-100;
-  @apply hover:text-gray-800 focus:ring-2 focus:ring-blue-500;
+  @apply px-3 py-1.5 text-sm font-medium border rounded-md transition-all duration-200;
+  @apply border-gray-300 text-gray-700 bg-white hover:bg-gray-50;
+  @apply focus:ring-2 focus:ring-blue-500 focus:ring-offset-1;
+  @apply active:bg-gray-100;
 }
 
 .dark .btn-small {
-  @apply border-gray-500 text-gray-300 bg-gray-600 hover:bg-gray-500;
-  @apply hover:text-white hover:border-gray-400;
-  @apply shadow-md hover:shadow-lg;
+  @apply border-gray-500 text-gray-200 bg-gray-700 hover:bg-gray-600;
+  @apply hover:border-gray-400 focus:ring-offset-gray-800;
+  @apply active:bg-gray-800;
+}
+
+/* Icon buttons - for icon-only actions */
+.btn-icon {
+  @apply p-2 text-gray-500 hover:text-gray-700 rounded-md;
+  @apply focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  @apply transition-colors duration-200;
+}
+
+.dark .btn-icon {
+  @apply text-gray-400 hover:text-gray-200;
+  @apply focus:ring-offset-gray-800;
+}
+
+/* Large icon buttons - for prominent icon actions */
+.btn-icon-lg {
+  @apply w-10 h-10 flex items-center justify-center rounded-lg;
+  @apply bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600;
+  @apply text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700;
+  @apply focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  @apply transition-all duration-200 shadow-sm hover:shadow-md;
+}
+
+.dark .btn-icon-lg {
+  @apply focus:ring-offset-gray-800;
+}
+
+/* Ghost buttons - minimal styling */
+.btn-ghost {
+  @apply px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-400;
+  @apply hover:text-gray-800 dark:hover:text-gray-200 rounded-md;
+  @apply focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  @apply transition-colors duration-200;
+}
+
+.dark .btn-ghost {
+  @apply focus:ring-offset-gray-800;
+}
+
+/* Danger buttons - for destructive actions */
+.btn-danger {
+  @apply px-4 py-2 text-sm font-medium bg-red-600 text-white rounded-md;
+  @apply hover:bg-red-700 active:bg-red-800;
+  @apply focus:ring-2 focus:ring-red-500 focus:ring-offset-2;
+  @apply transition-all duration-200;
+}
+
+.dark .btn-danger {
+  @apply focus:ring-offset-gray-800;
+}
+
+/* Special button variants for specific contexts */
+.btn-install-primary {
+  @apply flex-1 bg-white text-blue-600 text-sm font-medium py-2 px-3 rounded-md;
+  @apply hover:bg-blue-50 focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600;
+  @apply transition-all duration-200;
+}
+
+.btn-install-ghost {
+  @apply text-blue-100 text-sm py-2 px-3 hover:text-white rounded-md;
+  @apply focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600;
+  @apply transition-colors duration-200;
 }

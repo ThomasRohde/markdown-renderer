@@ -12,13 +12,6 @@ export const QRModal: React.FC<QRModalProps> = ({ isOpen, onClose, url, title = 
   const [qrCode, setQrCode] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>('');
-
-  useEffect(() => {
-    if (isOpen && url) {
-      generateQR();
-    }
-  }, [isOpen, url]);
-
   const generateQR = async () => {
     setIsLoading(true);
     setError('');
@@ -32,6 +25,12 @@ export const QRModal: React.FC<QRModalProps> = ({ isOpen, onClose, url, title = 
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (isOpen && url) {
+      generateQR();
+    }
+  }, [isOpen, url]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCopyUrl = async () => {
     try {
@@ -63,10 +62,9 @@ export const QRModal: React.FC<QRModalProps> = ({ isOpen, onClose, url, title = 
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
             {title}
-          </h3>
-          <button
+          </h3>          <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            className="btn-icon"
             aria-label="Close"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -100,12 +98,10 @@ export const QRModal: React.FC<QRModalProps> = ({ isOpen, onClose, url, title = 
               
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Scan with your phone camera to view this document
-              </p>
-
-              <div className="space-y-2">
+              </p>              <div className="space-y-2">
                 <button
                   onClick={handleCopyUrl}
-                  className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  className="btn-primary w-full"
                 >
                   Copy Link
                 </button>
@@ -113,7 +109,7 @@ export const QRModal: React.FC<QRModalProps> = ({ isOpen, onClose, url, title = 
                 {'share' in navigator && (
                   <button
                     onClick={handleNativeShare}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700"
+                    className="btn-secondary w-full"
                   >
                     Share via Device
                   </button>

@@ -30,18 +30,16 @@ export const InstallPrompt: React.FC = () => {
             Add to your home screen for quick access and offline use
           </p>
         </div>
-      </div>
-      
-      <div className="flex space-x-2 mt-3">
+      </div>      <div className="flex space-x-2 mt-3">
         <button
           onClick={handleInstall}
-          className="flex-1 bg-white text-blue-600 text-sm font-medium py-2 px-3 rounded-md hover:bg-blue-50 focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600"
+          className="btn-install-primary"
         >
           Install
         </button>
         <button
           onClick={() => {/* Could implement dismiss logic */}}
-          className="text-blue-100 text-sm py-2 px-3 hover:text-white"
+          className="btn-install-ghost"
         >
           Later
         </button>

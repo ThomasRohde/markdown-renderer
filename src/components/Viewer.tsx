@@ -108,10 +108,9 @@ export const Viewer: React.FC<ViewerProps> = ({
           <div className="text-red-500 text-5xl mb-4">⚠️</div>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
             Failed to Load Document
-          </h2>          <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
-          <button
+          </h2>          <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>          <button
             onClick={() => window.location.href = window.location.origin + window.location.pathname}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            className="btn-primary"
           >
             Create New Document
           </button>
@@ -178,10 +177,9 @@ export const Viewer: React.FC<ViewerProps> = ({
                 className="btn-secondary"
               >
                 Copy Link
-              </button>
-              <button
+              </button>              <button
                 onClick={handleEdit}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                className="btn-primary"
               >
                 Edit
               </button>

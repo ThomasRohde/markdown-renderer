@@ -57,12 +57,11 @@ export const Header: React.FC<HeaderProps> = ({ isEditor, title }) => {
               </p>
             )}
           </div>
-        </div>        
-        <div className="flex items-center space-x-2">
+        </div>          <div className="flex items-center space-x-2">
           {/* Theme Toggle */}
           <button
             onClick={handleThemeToggle}
-            className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:ring-2 focus:ring-blue-500 rounded-md"
+            className="btn-icon"
             title={`Current theme: ${theme}`}
             aria-label="Toggle theme"
           >
@@ -73,7 +72,7 @@ export const Header: React.FC<HeaderProps> = ({ isEditor, title }) => {
           {canInstall && (
             <button
               onClick={handleInstall}
-              className="px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="btn-small"
             >
               Install
             </button>
@@ -82,7 +81,7 @@ export const Header: React.FC<HeaderProps> = ({ isEditor, title }) => {
           {!isEditor && (
             <button
               onClick={() => window.location.href = window.location.origin + window.location.pathname}
-              className="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="btn-primary"
             >
               Create New
             </button>

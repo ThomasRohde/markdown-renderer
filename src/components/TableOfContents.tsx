@@ -25,15 +25,14 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({ items, isOpen,
   }
 
   return (
-    <>
-      {/* TOC Toggle Button */}
+    <>      {/* TOC Toggle Button */}
       <button
         onClick={onToggle}
-        className="fixed left-4 top-1/2 transform -translate-y-1/2 z-40 w-10 h-10 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 focus:ring-2 focus:ring-blue-500"
+        className="btn-icon-lg fixed left-4 top-1/2 transform -translate-y-1/2 z-40"
         title="Toggle Table of Contents"
         aria-label="Toggle Table of Contents"
       >
-        <svg className="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
