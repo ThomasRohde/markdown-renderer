@@ -286,19 +286,17 @@ export const Viewer: React.FC<ViewerProps> = ({
             <div className="flex flex-wrap items-center gap-2">
               <button
                 onClick={onToggleReadingMode}
-                className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2 flex items-center gap-1.5"
+                className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2"
                 title="Toggle reading mode"
               >
-                <BookOpen className="w-4 h-4" />
-                <span>Reading Mode</span>
+                Reading Mode
               </button>
               <button
                 onClick={handleCopyLink}
-                className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2 flex items-center gap-1.5"
+                className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2"
                 title="Copy link to clipboard"
               >
-                <Copy className="w-4 h-4" />
-                <span>Copy Link</span>
+                Copy Link
               </button>
               <button
                 onClick={handleEdit}
