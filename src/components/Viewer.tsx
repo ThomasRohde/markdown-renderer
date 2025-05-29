@@ -193,73 +193,80 @@ export const Viewer: React.FC<ViewerProps> = ({
             <div className="flex justify-center mb-3">
               <div className="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
             </div>
-            <div className="grid grid-cols-4 gap-3">
+            <div className="grid grid-cols-4 gap-4">
+              {/* View Source/Document toggle */}
               <button
                 onClick={() => {
                   setShowSource(!showSource);
                   setShowMobileActions(false);
-                }}                className="mobile-quick-action"
+                }}
+                className="flex flex-col items-center justify-center p-3"
               >
-                {showSource ? (
-                  <File className="w-5 h-5 mb-1.5" />
-                ) : (
-                  <FileText className="w-5 h-5 mb-1.5" />
-                )}
-                <span className="text-xs font-medium">{showSource ? 'View Doc' : 'Source'}</span>
+                {showSource ? 
+                  <File className="w-6 h-6" /> : 
+                  <FileText className="w-6 h-6" />
+                }
               </button>
               
+              {/* Table of Contents */}
               <button
                 onClick={() => {
                   setShowTOC(!showTOC); 
                   setShowMobileActions(false);
-                }}                className={`mobile-quick-action ${tableOfContents.length === 0 ? 'opacity-50' : ''}`}
+                }}
+                className={`flex flex-col items-center justify-center p-3 ${tableOfContents.length === 0 ? 'opacity-50' : ''}`}
                 disabled={tableOfContents.length === 0}
               >
-                <List className="w-5 h-5 mb-1.5" />
-                <span className="text-xs font-medium">Contents</span>
+                <List className="w-6 h-6" />
               </button>
               
+              {/* Share QR */}
               <button
                 onClick={() => {
                   handleShowQR();
                   setShowMobileActions(false);
-                }}                className="mobile-quick-action"
+                }}
+                className="flex flex-col items-center justify-center p-3"
               >
-                <Share2 className="w-5 h-5 mb-1.5" />
-                <span className="text-xs font-medium">Share</span>
+                <Share2 className="w-6 h-6" />
               </button>
               
+              {/* Favorite */}
               <button
-                onClick={handleToggleFavorite}                className={`mobile-quick-action ${isFavorite ? 'text-yellow-600 dark:text-yellow-400' : ''}`}
+                onClick={handleToggleFavorite}
+                className={`flex flex-col items-center justify-center p-3 ${isFavorite ? 'text-yellow-600 dark:text-yellow-400' : ''}`}
               >
-                <Star className={`w-5 h-5 mb-1.5 ${isFavorite ? 'fill-yellow-600 text-yellow-600 dark:fill-yellow-400 dark:text-yellow-400' : ''}`} fill={isFavorite ? 'currentColor' : 'none'} />
-                <span className="text-xs font-medium">Favorite</span>
+                <Star 
+                  className={`w-6 h-6 ${isFavorite ? 'fill-yellow-600 text-yellow-600 dark:fill-yellow-400 dark:text-yellow-400' : ''}`} 
+                  fill={isFavorite ? 'currentColor' : 'none'} 
+                />
               </button>
-            </div>
-              <div className="mt-5 grid grid-cols-2 gap-4">              <button
+              
+              {/* Reading Mode */}
+              <button
                 onClick={() => {
                   if (onToggleReadingMode) {
                     onToggleReadingMode();
                   }
                   setShowMobileActions(false);
                 }}
-                className="btn-secondary py-3 flex items-center justify-center gap-2 shadow-sm"
+                className="flex flex-col items-center justify-center p-3"
               >
-                <BookOpen className="w-4 h-4" />
-                Reading Mode
+                <BookOpen className="w-6 h-6" />
               </button>
+
+              {/* Edit */}
               <button
                 onClick={() => {
                   handleEdit();
                   setShowMobileActions(false);
                 }}
-                className="btn-primary py-3 flex items-center justify-center gap-2 shadow-sm"
+                className="flex flex-col items-center justify-center p-3"
               >
-                <Pencil className="w-4 h-4" />
-                Edit Document
+                <Pencil className="w-6 h-6" />
               </button>
             </div>
-              <button
+            <button
               onClick={() => setShowMobileActions(false)}
               className="mt-5 w-full text-center text-sm font-medium text-gray-500 dark:text-gray-400 py-2 rounded-lg active:bg-gray-100 dark:active:bg-gray-700"
             >
@@ -267,7 +274,8 @@ export const Viewer: React.FC<ViewerProps> = ({
             </button>
           </div>
         </div>
-      )}      
+      )}
+      
       {/* Top button bar: only show on desktop (sm and up) */}
       {!isReadingMode && (
         <div className="border-b border-gray-200 dark:border-gray-700 px-3 sm:px-6 py-3 sm:py-4 sticky top-0 bg-white dark:bg-gray-900 z-10 hidden sm:block">
@@ -278,31 +286,26 @@ export const Viewer: React.FC<ViewerProps> = ({
             <div className="flex flex-wrap items-center gap-2">
               <button
                 onClick={onToggleReadingMode}
-                className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2"
+                className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2 flex items-center gap-1.5"
                 title="Toggle reading mode"
               >
-                <span className="hidden sm:inline">Reading Mode</span>
-                <span className="sm:hidden">📖</span>
+                <BookOpen className="w-4 h-4" />
+                <span>Reading Mode</span>
               </button>
               <button
                 onClick={handleCopyLink}
-                className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2 hidden sm:inline-block"
-                title="Copy link to clipboard"
-              >
-                Copy Link
-              </button>
-              <button
-                onClick={handleCopyLink}
-                className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2 sm:hidden"
+                className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2 flex items-center gap-1.5"
                 title="Copy link to clipboard"
               >
                 <Copy className="w-4 h-4" />
+                <span>Copy Link</span>
               </button>
               <button
                 onClick={handleEdit}
-                className="btn-primary text-xs sm:text-sm py-1.5 sm:py-2"
+                className="btn-primary text-xs sm:text-sm py-1.5 sm:py-2 flex items-center gap-1.5"
               >
-                Edit
+                <Pencil className="w-4 h-4" />
+                <span>Edit</span>
               </button>
             </div>
           </div>
