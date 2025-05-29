@@ -84,13 +84,24 @@ export function getDocumentFromUrl(): string | null {
   const docParam = urlParams.get('doc');
   
   if (docParam) {
-    return docParam;
+    // URL decode the parameter in case it was encoded
+    try {
+      return decodeURIComponent(docParam);
+    } catch {
+      return docParam; // Return as-is if decoding fails
+    }
   }
   
   // Check fragment (hash) for larger documents
   const hash = window.location.hash;
   if (hash.startsWith('#doc=')) {
-    return hash.substring(5); // Remove '#doc='
+    const encoded = hash.substring(5); // Remove '#doc='
+    // URL decode the fragment in case it was encoded
+    try {
+      return decodeURIComponent(encoded);
+    } catch {
+      return encoded; // Return as-is if decoding fails
+    }
   }
   
   return null;
@@ -102,11 +113,14 @@ export function getDocumentFromUrl(): string | null {
 export function updateUrlWithDocument(encoded: string, useFragment: boolean): void {
   const baseUrl = window.location.origin + window.location.pathname;
   
+  // URL encode the base64 string to ensure it's safe for URLs
+  const urlSafeEncoded = encodeURIComponent(encoded);
+  
   if (useFragment) {
     // Use fragment for larger documents
-    window.history.replaceState({}, '', `${baseUrl}#doc=${encoded}`);
+    window.history.replaceState({}, '', `${baseUrl}#doc=${urlSafeEncoded}`);
   } else {
     // Use query parameter for smaller documents
-    window.history.replaceState({}, '', `${baseUrl}?doc=${encoded}`);
+    window.history.replaceState({}, '', `${baseUrl}?doc=${urlSafeEncoded}`);
   }
 }

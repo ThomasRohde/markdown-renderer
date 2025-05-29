@@ -9,11 +9,11 @@ export const MAX_DOCUMENT_SIZE = 100000;  // ~100KB uncompressed
 
 // Use for generating shareable links
 export const generateShareableLink = (encoded: string): string => {
-  return `${FULL_URL}?doc=${encoded}`;
+  return `${FULL_URL}?doc=${encodeURIComponent(encoded)}`;
 };
 
 export const generateFragmentLink = (encoded: string): string => {
-  return `${FULL_URL}#doc=${encoded}`;
+  return `${FULL_URL}#doc=${encodeURIComponent(encoded)}`;
 };
 
 // PWA configuration

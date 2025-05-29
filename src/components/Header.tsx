@@ -29,7 +29,7 @@ export const Header: React.FC<HeaderProps> = ({ isEditor, title }) => {
           {!isEditor && (
             <button
               onClick={() => window.location.href = window.location.origin + window.location.pathname}
-              className="px-4 py-2 text-sm bg-github-blue text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               Create New
             </button>
