@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { X, MoreHorizontal, BookOpen, Pencil, FileText, File, List, Share2, Star, Copy } from 'lucide-react';
 import { useEncoding } from '../hooks/useEncoding';
 import { useMarkdown } from '../hooks/useMarkdown';
 import { usePullToRefresh } from '../hooks/usePullToRefresh';
@@ -169,9 +170,7 @@ export const Viewer: React.FC<ViewerProps> = ({
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08), 0px 0px 0px 1px rgba(0, 0, 0, 0.04)'
           }}
         >
-          <svg className="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <X className="w-6 h-6 text-gray-600 dark:text-gray-300" />
         </button>
       )}      {/* Mobile Action Button (only in non-reading mode) - iOS style */}
       {!isReadingMode && (
@@ -181,9 +180,7 @@ export const Viewer: React.FC<ViewerProps> = ({
           style={{boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25), 0 0 0 1px rgba(37, 99, 235, 0.1)'}}
           aria-label="Show actions"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
-          </svg>
+          <MoreHorizontal className="w-6 h-6" />
         </button>
       )}      {/* Mobile Actions Drawer - iOS-style */}
       {showMobileActions && (
@@ -203,7 +200,11 @@ export const Viewer: React.FC<ViewerProps> = ({
                   setShowMobileActions(false);
                 }}                className="mobile-quick-action"
               >
-                <span className="text-xl mb-1.5">{showSource ? '📄' : '📝'}</span>
+                {showSource ? (
+                  <File className="w-5 h-5 mb-1.5" />
+                ) : (
+                  <FileText className="w-5 h-5 mb-1.5" />
+                )}
                 <span className="text-xs font-medium">{showSource ? 'View Doc' : 'Source'}</span>
               </button>
               
@@ -214,7 +215,7 @@ export const Viewer: React.FC<ViewerProps> = ({
                 }}                className={`mobile-quick-action ${tableOfContents.length === 0 ? 'opacity-50' : ''}`}
                 disabled={tableOfContents.length === 0}
               >
-                <span className="text-xl mb-1.5">📑</span>
+                <List className="w-5 h-5 mb-1.5" />
                 <span className="text-xs font-medium">Contents</span>
               </button>
               
@@ -224,14 +225,14 @@ export const Viewer: React.FC<ViewerProps> = ({
                   setShowMobileActions(false);
                 }}                className="mobile-quick-action"
               >
-                <span className="text-xl mb-1.5">📱</span>
+                <Share2 className="w-5 h-5 mb-1.5" />
                 <span className="text-xs font-medium">Share</span>
               </button>
               
               <button
                 onClick={handleToggleFavorite}                className={`mobile-quick-action ${isFavorite ? 'text-yellow-600 dark:text-yellow-400' : ''}`}
               >
-                <span className="text-xl mb-1.5">{isFavorite ? '★' : '☆'}</span>
+                <Star className={`w-5 h-5 mb-1.5 ${isFavorite ? 'fill-yellow-600 text-yellow-600 dark:fill-yellow-400 dark:text-yellow-400' : ''}`} fill={isFavorite ? 'currentColor' : 'none'} />
                 <span className="text-xs font-medium">Favorite</span>
               </button>
             </div>
@@ -244,9 +245,7 @@ export const Viewer: React.FC<ViewerProps> = ({
                 }}
                 className="btn-secondary py-3 flex items-center justify-center gap-2 shadow-sm"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
+                <BookOpen className="w-4 h-4" />
                 Reading Mode
               </button>
               <button
@@ -256,9 +255,7 @@ export const Viewer: React.FC<ViewerProps> = ({
                 }}
                 className="btn-primary py-3 flex items-center justify-center gap-2 shadow-sm"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                </svg>
+                <Pencil className="w-4 h-4" />
                 Edit Document
               </button>
             </div>
@@ -332,7 +329,7 @@ export const Viewer: React.FC<ViewerProps> = ({
                 className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2 sm:hidden"
                 title="Copy link to clipboard"
               >
-                📋
+                <Copy className="w-4 h-4" />
               </button>
               <button
                 onClick={handleEdit}

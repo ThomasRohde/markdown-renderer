@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { ChevronsUp, ArrowDownToLine } from 'lucide-react';
 interface PullToRefreshProps {
   isPulling: boolean;
   pullDistance: number;
@@ -71,29 +71,9 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
             
             {/* Arrow icon changes when pulled enough */}
             {progress >= 100 ? (
-              <svg
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 text-blue-600"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="3"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path d="M5 11l7-7 7 7M5 19l7-7 7 7" />
-              </svg>
+              <ChevronsUp className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 text-blue-600" />
             ) : (
-              <svg
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 text-blue-600"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="3"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-              </svg>
+              <ArrowDownToLine className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 text-blue-600" />
             )}
           </div>
         )}
