@@ -18,7 +18,6 @@ export const Viewer: React.FC<ViewerProps> = ({
   
   const { decode, getFromUrl } = useEncoding();
   const { renderedHtml, title, render } = useMarkdown();
-
   useEffect(() => {
     const loadDocument = async () => {
       const encoded = getFromUrl();
@@ -46,6 +45,15 @@ export const Viewer: React.FC<ViewerProps> = ({
 
     loadDocument();
   }, [decode, getFromUrl, render]);
+
+  // Update browser tab title when document title changes
+  useEffect(() => {
+    if (title && title !== 'Untitled Document') {
+      document.title = `${title} - Markdown Viewer`;
+    } else {
+      document.title = 'Document - Markdown Viewer';
+    }
+  }, [title]);
 
   const handleCopyLink = async () => {
     try {

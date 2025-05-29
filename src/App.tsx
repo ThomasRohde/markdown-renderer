@@ -2,12 +2,10 @@ import { useEffect, useState } from 'react';
 import { Header } from './components/Header';
 import { Editor } from './components/Editor';
 import { Viewer } from './components/Viewer';
-import { useMarkdown } from './hooks/useMarkdown';
 
 function App() {
   const [isEditor, setIsEditor] = useState(true);
   const [isReadingMode, setIsReadingMode] = useState(false);
-  const { title } = useMarkdown();
 
   useEffect(() => {
     // Determine if we should show editor or viewer based on URL parameters
@@ -17,10 +15,17 @@ function App() {
     setIsReadingMode(hasDoc);
   }, []);
 
+  // Update browser tab title for editor mode
+  useEffect(() => {
+    if (isEditor) {
+      document.title = 'Markdown Document Viewer';
+    }
+  }, [isEditor]);
+
   return (
     <div className={`min-h-screen flex flex-col ${isReadingMode ? 'bg-white dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-900'}`}>
-      {(!isEditor && !isReadingMode) && <Header isEditor={isEditor} title={title} />}
-      {isEditor && <Header isEditor={isEditor} title={title} />}
+      {(!isEditor && !isReadingMode) && <Header isEditor={isEditor} />}
+      {isEditor && <Header isEditor={isEditor} />}
       <main className="flex-1 flex flex-col">
         {isEditor ? (
           <Editor />
