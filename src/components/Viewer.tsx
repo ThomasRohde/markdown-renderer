@@ -267,8 +267,10 @@ export const Viewer: React.FC<ViewerProps> = ({
             </button>
           </div>
         </div>
-      )}      {!isReadingMode && (
-        <div className="border-b border-gray-200 dark:border-gray-700 px-3 sm:px-6 py-3 sm:py-4 sticky top-0 bg-white dark:bg-gray-900 z-10">
+      )}      
+      {/* Top button bar: only show on desktop (sm and up) */}
+      {!isReadingMode && (
+        <div className="border-b border-gray-200 dark:border-gray-700 px-3 sm:px-6 py-3 sm:py-4 sticky top-0 bg-white dark:bg-gray-900 z-10 hidden sm:block">
           <div className="flex flex-wrap gap-3 items-center justify-between">
             <h2 className="text-base sm:text-lg font-medium text-gray-900 dark:text-white truncate max-w-[200px] sm:max-w-md">
               {title}
@@ -282,41 +284,6 @@ export const Viewer: React.FC<ViewerProps> = ({
                 <span className="hidden sm:inline">Reading Mode</span>
                 <span className="sm:hidden">📖</span>
               </button>
-              <button
-                onClick={() => setShowSource(!showSource)}
-                className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2"
-                title={showSource ? "View rendered markdown" : "View source"}
-              >
-                <span className="hidden sm:inline">{showSource ? 'View Rendered' : 'View Source'}</span>
-                <span className="sm:hidden">{showSource ? '📄' : '📝'}</span>
-              </button>
-              {tableOfContents.length > 0 && (
-                <button
-                  onClick={() => setShowTOC(!showTOC)}
-                  className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2"
-                  title="Table of Contents"
-                >
-                  <span className="hidden sm:inline">TOC</span>
-                  <span className="sm:hidden">📑</span>
-                </button>
-              )}
-              <button
-                onClick={handleToggleFavorite}
-                className={`btn-secondary text-xs sm:text-sm py-1.5 sm:py-2 ${isFavorite ? 'text-yellow-600 dark:text-yellow-400' : ''}`}
-                title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-              >
-                {isFavorite ? '★' : '☆'}
-              </button>
-              <div className="dropdown-wrapper relative">
-                <button
-                  onClick={handleShowQR}
-                  className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2"
-                  title="Share via QR Code"
-                >
-                  <span className="hidden sm:inline">QR</span>
-                  <span className="sm:hidden">📱</span>
-                </button>
-              </div>
               <button
                 onClick={handleCopyLink}
                 className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2 hidden sm:inline-block"
