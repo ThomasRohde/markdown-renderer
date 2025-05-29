@@ -16,12 +16,13 @@ export const InstallPrompt: React.FC = () => {
   }
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-sm bg-blue-600 text-white rounded-lg shadow-lg p-4 z-40">
-      <div className="flex items-start space-x-3">
+    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-sm bg-blue-600 text-white rounded-lg shadow-lg p-4 z-40">      <div className="flex items-start space-x-3">
         <div className="flex-shrink-0">
-          <div className="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
-            <span className="text-lg font-bold">M</span>
-          </div>
+          <img 
+            src="/markdown-renderer/icon-192.png" 
+            alt="Markdown Viewer App Icon"
+            className="w-10 h-10 rounded-lg shadow-sm"
+          />
         </div>
         <div className="flex-1 min-w-0">
           <h4 className="text-sm font-medium">Install Markdown Viewer</h4>
