@@ -19,19 +19,30 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   if (!isPulling && !isRefreshing) {
     return null;
   }
-    return (
+  
+  // Calculate opacity and scale based on pull distance
+  const opacity = Math.min(1, pullDistance / 30);
+  const scale = Math.min(1, pullDistance / pullDownThreshold);
+  
+  return (
     <div 
-      className="fixed top-0 left-0 right-0 z-50 flex justify-center transition-transform duration-300 ease-out pt-safe"
-      style={{ transform: `translateY(${pullDistance}px)` }}
+      className="fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] pt-safe"
+      style={{ 
+        transform: `translateY(${pullDistance}px)`,
+        opacity: opacity
+      }}
     >
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-3 mx-auto flex items-center justify-center border border-gray-200 dark:border-gray-700"
-           style={{
-             backdropFilter: 'blur(20px)',
-             WebkitBackdropFilter: 'blur(20px)',
-             backgroundColor: 'rgba(255, 255, 255, 0.9)',
-           }}>
+      <div 
+        className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-3 mx-auto flex items-center justify-center border border-gray-200 dark:border-gray-700"
+        style={{
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          transform: `scale(${scale})`
+        }}
+      >
         {isRefreshing ? (
-          <div className="animate-spin rounded-full h-7 w-7 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-7 w-7 border-2 border-blue-600 border-t-transparent"></div>
         ) : (
           <div className="relative h-7 w-7">
             {/* Progress circle */}
