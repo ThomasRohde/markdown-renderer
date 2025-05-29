@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { X, MoreHorizontal, BookOpen, Pencil, FileText, File, List, Share2, Star, Copy } from 'lucide-react';
+import { X, MoreHorizontal, BookOpen, Pencil, FileText, File, List, Share2, Star } from 'lucide-react';
 import { useEncoding } from '../hooks/useEncoding';
 import { useMarkdown } from '../hooks/useMarkdown';
 import { usePullToRefresh } from '../hooks/usePullToRefresh';
