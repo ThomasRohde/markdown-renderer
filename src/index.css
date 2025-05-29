@@ -107,3 +107,83 @@
     background-color: #161b22;
   }
 }
+
+/* Reading mode enhancements */
+.reading-mode .markdown-body {
+  line-height: 1.6;
+  font-size: 18px;
+  max-width: none;
+}
+
+.reading-mode .markdown-body h1,
+.reading-mode .markdown-body h2,
+.reading-mode .markdown-body h3,
+.reading-mode .markdown-body h4,
+.reading-mode .markdown-body h5,
+.reading-mode .markdown-body h6 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.reading-mode .markdown-body p {
+  margin-bottom: 1.5rem;
+}
+
+.reading-mode .markdown-body blockquote {
+  margin: 1.5rem 0;
+  padding: 1rem 1.5rem;
+}
+
+.reading-mode .markdown-body pre {
+  margin: 1.5rem 0;
+}
+
+.reading-mode .markdown-body ul,
+.reading-mode .markdown-body ol {
+  margin-bottom: 1.5rem;
+}
+
+/* App icon animation */
+@keyframes pulse-gentle {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+.app-icon-pulse {
+  animation: pulse-gentle 3s ease-in-out infinite;
+}
+
+/* App icon entrance animation */
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.app-icon-enter {
+  animation: slideInFromRight 0.5s ease-out;
+}
+
+/* Improved app icon styling */
+.app-icon {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.app-icon:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  box-shadow: 0 12px 30px rgba(59, 130, 246, 0.4);
+  transform: scale(1.05) translateY(-2px);
+}
