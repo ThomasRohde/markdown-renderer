@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { X, MoreHorizontal, BookOpen, Pencil, FileText, File, List, Share2, Star } from 'lucide-react';
+import { X, MoreHorizontal, BookOpen, Pencil, FileText, File, Share2 } from 'lucide-react';
 import { useEncoding } from '../hooks/useEncoding';
 import { useMarkdown } from '../hooks/useMarkdown';
 import { usePullToRefresh } from '../hooks/usePullToRefresh';
@@ -17,11 +17,10 @@ export const Viewer: React.FC<ViewerProps> = ({
   onToggleReadingMode 
 }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [showSource, setShowSource] = useState(false);
+  const [error, setError] = useState<string | null>(null);  const [showSource, setShowSource] = useState(false);
   const [originalMarkdown, setOriginalMarkdown] = useState('');
   const [showQRModal, setShowQRModal] = useState(false);
-  const [showTOC, setShowTOC] = useState(false);  const [isFavorite, setIsFavorite] = useState(false);
+  const [showTOC, setShowTOC] = useState(false);
   const [showMobileActions, setShowMobileActions] = useState(false);
   
   const { decode, getFromUrl } = useEncoding();
@@ -95,21 +94,9 @@ export const Viewer: React.FC<ViewerProps> = ({
       console.error('Failed to copy link:', err);
     }
   };
-
   const handleShowQR = () => {
     setShowQRModal(true);
     setShowMobileActions(false);
-  };
-
-  const handleToggleFavorite = async () => {
-    // Implementation for toggling favorite status
-    try {
-      const newStatus = !isFavorite;
-      setIsFavorite(newStatus);
-      // Save to storage would go here
-    } catch (err) {
-      console.error('Failed to toggle favorite:', err);
-    }
   };
   
   const handleEdit = () => {
