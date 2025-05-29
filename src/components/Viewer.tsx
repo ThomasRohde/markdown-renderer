@@ -158,18 +158,17 @@ export const Viewer: React.FC<ViewerProps> = ({
         pullDistance={pullDistance}
         isRefreshing={isRefreshing}
         pullDownThreshold={80}
-      />
-      {/* Reading Mode Toggle Button */}
+      />      {/* Reading Mode Toggle Button */}
       {isReadingMode && (
         <button
           onClick={onToggleReadingMode}
-          className="fixed top-4 right-4 z-50 w-12 h-12 app-icon rounded-full flex items-center justify-center transition-all duration-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 app-icon-enter shadow-lg"
-          title="Show app controls"
-          aria-label="Show app controls"
+          className="fixed top-4 right-4 z-50 w-12 h-12 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-full flex items-center justify-center transition-all duration-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+          title="Exit reading mode"
+          aria-label="Exit reading mode"
         >
-          <div className="w-7 h-7 bg-white rounded flex items-center justify-center">
-            <span className="text-blue-600 font-bold text-base">M</span>
-          </div>
+          <svg className="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </button>
       )}
 

@@ -59,18 +59,6 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({ items, isOpen,
         </svg>
       </button>
 
-      {/* Mobile TOC Button - Bottom right */}
-      <button
-        onClick={onToggle}
-        className="fixed sm:hidden right-4 bottom-16 btn-icon-lg shadow-lg z-40 bg-blue-600 text-white dark:bg-blue-600"
-        title="Table of Contents"
-        aria-label="Open Table of Contents"  
-      >
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
-
       {/* TOC Panel - Enhanced for mobile */}
       {isOpen && (
         <div className={`
