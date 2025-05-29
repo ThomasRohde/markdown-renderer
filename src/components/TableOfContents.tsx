@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface TOCItem {
   level: number;
@@ -13,16 +13,38 @@ interface TableOfContentsProps {
 }
 
 export const TableOfContents: React.FC<TableOfContentsProps> = ({ items, isOpen, onToggle }) => {
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    
+    // Initial check
+    checkMobile();
+    
+    // Add resize listener
+    window.addEventListener('resize', checkMobile);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
   const handleItemClick = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
+    }
+    // On mobile, close the TOC after clicking an item
+    if (isMobile) {
+      setTimeout(() => onToggle(), 300);
     }
   };
 
   if (items.length === 0) {
     return null;
   }
+  
   return (
     <>
       {/* TOC Toggle Button - Hidden on mobile */}
@@ -49,9 +71,21 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({ items, isOpen,
         </svg>
       </button>
 
-      {/* TOC Panel */}
+      {/* TOC Panel - Enhanced for mobile */}
       {isOpen && (
-        <div className="fixed sm:left-4 sm:top-16 sm:bottom-16 sm:w-64 inset-y-0 inset-x-0 sm:inset-auto bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 sm:rounded-lg shadow-lg z-30 overflow-hidden flex flex-col">
+        <div className={`
+          fixed sm:left-4 sm:top-16 sm:bottom-16 sm:w-64 
+          ${isMobile ? 'inset-x-0 bottom-0 top-auto max-h-[80vh] rounded-t-xl' : 'inset-y-0 inset-x-0 sm:inset-auto sm:rounded-lg'}
+          bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 
+          shadow-lg z-30 overflow-hidden flex flex-col
+        `}>
+          {/* Drag handle for mobile */}
+          {isMobile && (
+            <div className="w-full h-1.5 flex items-center justify-center p-3">
+              <div className="w-12 h-1 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+            </div>
+          )}
+        
           <div className="p-3 sm:p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
               Table of Contents
@@ -67,17 +101,11 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({ items, isOpen,
             </button>
           </div>
           
-          <div className="overflow-y-auto flex-1 p-2">
+          <div className="overflow-y-auto flex-1 p-2 pb-safe">
             {items.map((item, index) => (
               <button
                 key={index}
-                onClick={() => {
-                  handleItemClick(item.id);
-                  // On mobile, close the TOC after clicking an item
-                  if (window.innerWidth < 640) {
-                    onToggle();
-                  }
-                }}
+                onClick={() => handleItemClick(item.id)}
                 className={`
                   w-full text-left px-2 py-2 sm:py-1 rounded text-sm hover:bg-gray-100 dark:hover:bg-gray-700 
                   ${item.level === 1 ? 'font-semibold text-gray-900 dark:text-white' : ''}
@@ -86,6 +114,7 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({ items, isOpen,
                   ${item.level === 4 ? 'text-gray-600 dark:text-gray-400 ml-6' : ''}
                   ${item.level === 5 ? 'text-gray-500 dark:text-gray-500 ml-8' : ''}
                   ${item.level === 6 ? 'text-gray-500 dark:text-gray-500 ml-10' : ''}
+                  ${isMobile ? 'mb-1 active:bg-gray-200 dark:active:bg-gray-600' : ''}
                 `}
                 title={item.text}
               >
@@ -98,10 +127,10 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({ items, isOpen,
         </div>
       )}
 
-      {/* Backdrop */}
+      {/* Backdrop - with blur on mobile */}
       {isOpen && (
         <div 
-          className="fixed inset-0 z-20" 
+          className={`fixed inset-0 z-20 ${isMobile ? 'bg-black/50 backdrop-blur-sm' : ''}`}
           onClick={onToggle}
           aria-hidden="true"
         />
