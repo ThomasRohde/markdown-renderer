@@ -1,11 +1,17 @@
 @import "tailwindcss";
 
-/* GitHub-style markdown rendering */
+/* GitHub-style markdown rendering with mobile optimization */
 .markdown-body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.5;
   word-wrap: break-word;
+}
+
+@media (min-width: 640px) {
+  .markdown-body {
+    font-size: 16px;
+  }
 }
 
 .markdown-body h1,
@@ -71,6 +77,138 @@
 .markdown-body th {
   background-color: #f6f8fa;
   font-weight: 600;
+}
+
+/* Mobile-specific optimizations */
+.mobile-optimized img {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+}
+
+.mobile-optimized pre {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-optimized table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile-friendly typography adjustments */
+@media (max-width: 640px) {
+  .markdown-body h1 {
+    font-size: 1.75em;
+    margin-top: 1.5rem;
+    padding-bottom: 0.25em;
+  }
+  
+  .markdown-body h2 {
+    font-size: 1.35em;
+    margin-top: 1.25rem;
+    padding-bottom: 0.25em;
+  }
+  
+  .markdown-body h3 {
+    font-size: 1.15em;
+    margin-top: 1rem;
+  }
+  
+  .markdown-body ul,
+  .markdown-body ol {
+    padding-left: 1.25rem;
+  }
+  
+  .markdown-body blockquote {
+    padding: 0.5rem 0.75rem;
+    margin: 1rem 0;
+  }
+}
+
+/* Touch-friendly buttons and interactions */
+button, 
+.btn-primary,
+.btn-secondary,
+.btn-small,
+.btn-icon {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Add active states for better mobile touch feedback */
+.btn-primary:active,
+.btn-secondary:active,
+.btn-small:active,
+.btn-icon:active {
+  transform: scale(0.98);
+}
+
+/* Mobile-first Header treatments */
+@media (max-width: 640px) {
+  header h1 {
+    font-size: 1.125rem;
+  }
+}
+
+/* Reading mode mobile enhancements */
+@media (max-width: 640px) {
+  .reading-mode .markdown-body {
+    font-size: 16px;
+    line-height: 1.6;
+    padding: 0 0.5rem;
+  }
+}
+
+/* Responsive pop-ups and modals */
+.dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* Add mobile bottom app bar styling */
+.mobile-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(229, 231, 235, 0.8);
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-around;
+  z-index: 50;
+}
+
+.dark .mobile-bottom-bar {
+  background-color: rgba(17, 24, 39, 0.9);
+  border-top-color: rgba(55, 65, 81, 0.8);
+}
+
+/* Custom scrollbar for mobile */
+@media (max-width: 640px) {
+  .markdown-body::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  
+  .markdown-body::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .markdown-body::-webkit-scrollbar-thumb {
+    background-color: rgba(156, 163, 175, 0.5);
+    border-radius: 20px;
+  }
+  
+  .dark .markdown-body::-webkit-scrollbar-thumb {
+    background-color: rgba(75, 85, 99, 0.5);
+  }
 }
 
 /* Dark mode */
@@ -457,4 +595,131 @@
   @apply text-blue-100 text-sm py-2 px-3 hover:text-white rounded-md;
   @apply focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600;
   @apply transition-colors duration-200;
+}
+
+/* Mobile orientation optimizations */
+
+/* Mobile Portrait Mode */
+@media (max-width: 640px) and (orientation: portrait) {
+  .markdown-body {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  
+  /* Better margins for mobile portrait */
+  .markdown-body p, 
+  .markdown-body h1, 
+  .markdown-body h2, 
+  .markdown-body h3,
+  .markdown-body ul, 
+  .markdown-body ol {
+    margin-bottom: 1rem;
+  }
+  
+  .markdown-body blockquote {
+    margin: 1rem 0;
+    padding: 0.75rem;
+  }
+  
+  /* Optimize button touch targets for portrait */
+  .btn-primary,
+  .btn-secondary,
+  .btn-small {
+    min-height: 36px;
+  }
+  
+  /* Optimize image display in portrait */
+  .markdown-body img {
+    max-height: 50vh;
+  }
+}
+
+/* Mobile Landscape Mode */
+@media (max-height: 480px) and (orientation: landscape) {
+  .markdown-body {
+    font-size: 14px;
+  }
+  
+  /* Adjust UI for landscape */
+  header {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+  
+  /* Compact margins for landscape */
+  .markdown-body h1, 
+  .markdown-body h2 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .markdown-body h3,
+  .markdown-body h4,
+  .markdown-body h5,
+  .markdown-body h6 {
+    margin-top: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Optimize header height in landscape */
+  header h1 {
+    font-size: 1rem;
+  }
+  
+  /* Better image display in landscape */
+  .markdown-body img {
+    max-height: 70vh;
+  }
+}
+
+/* Safe area insets for notched devices */
+@supports(padding: max(0px)) {
+  .markdown-body {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+  
+  .fixed, .bottom-4, .top-4 {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}
+
+/* iPad/tablet optimizations */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .markdown-body {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  
+  /* Improved touch targets for tablets */
+  .btn-primary,
+  .btn-secondary,
+  .btn-small {
+    min-height: 40px;
+  }
+  
+  /* Better padding for tablet screens */
+  .reading-mode .markdown-body {
+    padding: 0 1.5rem;
+  }
+}
+
+/* Initial page load animations for mobile */
+@media (max-width: 640px) {
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .markdown-body {
+    animation: fadeInUp 0.3s ease-out;
+  }
 }

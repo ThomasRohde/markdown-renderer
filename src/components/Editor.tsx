@@ -114,19 +114,20 @@ export const Editor: React.FC = () => {
 
   return (
     <div className="flex-1 flex flex-col max-w-7xl mx-auto w-full">
-      <div className="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <h2 className="text-lg font-medium text-gray-900 dark:text-white">
+      <div className="border-b border-gray-200 dark:border-gray-700 px-3 sm:px-6 py-3 sm:py-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+            <h2 className="text-base sm:text-lg font-medium text-gray-900 dark:text-white">
               Create Document
             </h2>
-            <div className="text-sm text-gray-500 dark:text-gray-400">
+            <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
               {charCount} chars • {wordCount} words
             </div>
-          </div>          <div className="flex items-center space-x-2">
+          </div>
+          <div className="flex items-center space-x-2">
             <button
               onClick={() => setShowPreview(!showPreview)}
-              className="btn-secondary"
+              className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2"
             >
               {showPreview ? 'Edit' : 'Preview'}
             </button>
@@ -136,14 +137,15 @@ export const Editor: React.FC = () => {
 
       <div className="flex-1 flex">
         <div className="flex-1 flex flex-col">
-          {!showPreview ? (
-            <textarea
+          {!showPreview ? (          <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="flex-1 resize-none border-0 p-6 font-mono text-sm focus:ring-0 focus:outline-none bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+              className="flex-1 resize-none border-0 p-4 sm:p-6 font-mono text-sm focus:ring-0 focus:outline-none bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
               placeholder="Type your Markdown here..."
+              spellCheck="false"
+              autoComplete="off"
             />          ) : (
-            <div className="flex-1 p-6 overflow-auto">
+            <div className="flex-1 p-3 sm:p-6 overflow-auto">
               <div 
                 className="markdown-body"
                 dangerouslySetInnerHTML={{ __html: renderedHtml }}
@@ -153,38 +155,41 @@ export const Editor: React.FC = () => {
         </div>
       </div>
 
-      <div className="border-t border-gray-200 dark:border-gray-700 px-6 py-4">
-        <div className="flex items-center justify-between">          <div className="flex items-center space-x-3">            <button
+      <div className="border-t border-gray-200 dark:border-gray-700 px-3 sm:px-6 py-3 sm:py-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
+          <div className="flex flex-wrap items-center gap-2 justify-center sm:justify-start">
+            <button
               onClick={handleGenerateLink}
               disabled={isGenerating || !content.trim()}
-              className="btn-primary"
+              className="btn-primary text-xs sm:text-sm py-1.5 sm:py-2"
             >
               {isGenerating ? 'Generating...' : 'Generate Link'}
             </button>
             <button
               onClick={handleClear}
-              className="btn-secondary"
+              className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2"
             >
               Clear
             </button>
             <button
               onClick={handleLoadExample}
-              className="btn-secondary"
+              className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2"
             >
               Load Example
             </button>
           </div>
           
           {generatedLink && (
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 justify-center sm:justify-end">
               <input
                 type="text"
                 value={generatedLink}
                 readOnly
-                className="px-3 py-1 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm w-64"
-              />              <button
+                className="px-2 sm:px-3 py-1 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-xs sm:text-sm w-full sm:w-64 truncate"
+              />
+              <button
                 onClick={() => navigator.clipboard.writeText(generatedLink)}
-                className="btn-small"
+                className="btn-small text-xs sm:text-sm py-1 whitespace-nowrap"
               >
                 Copy
               </button>

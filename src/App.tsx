@@ -26,9 +26,8 @@ function App() {
       document.title = 'Markdown Document Viewer';
     }
   }, [isEditor]);
-
   return (
-    <div className={`min-h-screen flex flex-col ${isReadingMode ? 'bg-white dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-900'}`}>
+    <div className={`min-h-screen flex flex-col ${isReadingMode ? 'bg-white dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-900'} max-w-full overflow-hidden`}>
       {(!isEditor && !isReadingMode) && <Header isEditor={isEditor} />}
       {isEditor && <Header isEditor={isEditor} />}
       <main className="flex-1 flex flex-col">
