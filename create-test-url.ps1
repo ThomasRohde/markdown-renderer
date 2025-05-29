@@ -23,16 +23,21 @@ Write-Host $markdown
 Write-Host ""
 
 # You can run this with node
+# Write markdown to a temporary file
+$markdown | Out-File -FilePath "temp-markdown.txt" -Encoding UTF8 -NoNewline
+
 $nodeScript = @"
+const fs = require('fs');
 const pako = require('pako');
-const markdown = `$($markdown -replace '`', '\`')`;
+const markdown = fs.readFileSync('temp-markdown.txt', 'utf8');
 const compressed = pako.gzip(new TextEncoder().encode(markdown));
 const base64 = btoa(String.fromCharCode(...compressed));
 const urlSafe = encodeURIComponent(base64);
 console.log('Test URL:');
-console.log('http://localhost:5174/markdown-renderer/?doc=' + urlSafe);
+console.log('http://localhost:5173/markdown-renderer/?doc=' + urlSafe);
 "@
 
 $nodeScript | Out-File -FilePath "temp-url-gen.cjs" -Encoding UTF8
 node temp-url-gen.cjs
 Remove-Item "temp-url-gen.cjs"
+Remove-Item "temp-markdown.txt"
