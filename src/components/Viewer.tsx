@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { X, MoreHorizontal, BookOpen, Pencil, FileText, File, Share2, Menu } from 'lucide-react';
+import { X, MoreHorizontal, BookOpen, Pencil, FileText, File, Share2, Menu, Copy } from 'lucide-react';
 import { useEncoding } from '../hooks/useEncoding';
 import { useMarkdown } from '../hooks/useMarkdown';
 import { usePullToRefresh } from '../hooks/usePullToRefresh';
@@ -331,8 +331,7 @@ export const Viewer: React.FC<ViewerProps> = ({
           </div>
         </div>
       )}
-      
-      {/* Top button bar: only show on desktop (sm and up) */}
+        {/* Top button bar: only show on desktop (sm and up) */}
       {!isReadingMode && (
         <div className="border-b border-gray-200 dark:border-gray-700 px-3 sm:px-6 py-3 sm:py-4 sticky top-0 bg-white dark:bg-gray-900 z-10 hidden sm:block">
           <div className="flex flex-wrap gap-3 items-center justify-between">
@@ -340,20 +339,59 @@ export const Viewer: React.FC<ViewerProps> = ({
               {title}
             </h2>
             <div className="flex flex-wrap items-center gap-2">
+              {/* Table of Contents */}
+              {tableOfContents.length > 0 && (
+                <button
+                  onClick={handleToggleTOC}
+                  className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2"
+                  title="Table of Contents"
+                >
+                  <Menu className="w-4 h-4 mr-1" />
+                  <span>Contents</span>
+                </button>
+              )}
+              
+              {/* View Source */}
+              <button
+                onClick={handleToggleSource}
+                className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2"
+                title={showSource ? "View Rendered" : "View Source"}
+              >
+                {showSource ? 
+                  <File className="w-4 h-4 mr-1" /> : 
+                  <FileText className="w-4 h-4 mr-1" />
+                }
+                <span>{showSource ? "Rendered" : "Source"}</span>
+              </button>
+              
+              {/* Share QR */}
+              <button
+                onClick={handleShowQR}
+                className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2"
+                title="Share QR Code"
+              >
+                <Share2 className="w-4 h-4 mr-1" />
+                <span>Share</span>
+              </button>
+              
               <button
                 onClick={onToggleReadingMode}
                 className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2"
                 title="Toggle reading mode"
               >
-                Reading Mode
+                <BookOpen className="w-4 h-4 mr-1" />
+                <span>Reading</span>
               </button>
+              
               <button
                 onClick={handleCopyLink}
                 className="btn-secondary text-xs sm:text-sm py-1.5 sm:py-2"
                 title="Copy link to clipboard"
               >
-                Copy Link
+                <Copy className="w-4 h-4 mr-1" />
+                <span>Copy</span>
               </button>
+              
               <button
                 onClick={handleEdit}
                 className="btn-primary text-xs sm:text-sm py-1.5 sm:py-2 flex items-center gap-1.5"
@@ -363,8 +401,7 @@ export const Viewer: React.FC<ViewerProps> = ({
               </button>
             </div>
           </div>
-        </div>
-      )}      
+        </div>      )}
       
       <div className={`flex-1 overflow-auto ${isReadingMode ? 'px-4 py-8 sm:px-6 md:px-12 lg:px-16' : ''}`}>
         {showSource && !isReadingMode ? (
