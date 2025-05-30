@@ -27,19 +27,27 @@ export const usePullToRefresh = ({
     }
     return 0;
   }, [lastY, lastTime]);
-
   useEffect(() => {
     let startY = 0;
     let isBeingTouched = false;
+    let hasMovedSignificantly = false;
     
     const handleTouchStart = (e: TouchEvent) => {
       // Only enable pull-to-refresh if we're at the top of the document
+      // and the touch didn't start on an interactive element
+      const target = e.target as Element;
+      
+      // Check if touch started on a button, link, or other interactive element
+      if (target.closest('button, a, input, textarea, select, [role="button"], [onclick]')) {
+        return;
+      }
+      
       if (window.scrollY === 0) {
         isBeingTouched = true;
+        hasMovedSignificantly = false;
         startY = e.touches[0].clientY;
         setLastY(startY);
         setLastTime(e.timeStamp);
-        setIsPulling(true);
         setVelocity(0);
       }
     };
@@ -56,14 +64,20 @@ export const usePullToRefresh = ({
       setLastY(currentY);
       setLastTime(e.timeStamp);
       
+      // Only track significant movement to avoid interfering with taps
+      if (Math.abs(distance) > 10) {
+        hasMovedSignificantly = true;
+        setIsPulling(true);
+      }
+      
       // Only allow pulling down, not up
       if (distance < 0) {
         distance = 0;
       }
       
       // iOS-style progressive resistance
-      if (distance > 0) {
-        // Prevent default to stop scrolling
+      if (distance > 0 && hasMovedSignificantly) {
+        // Only prevent default if we've actually started pulling significantly
         e.preventDefault();
         
         // Progressive resistance that increases as you pull further
@@ -80,11 +94,11 @@ export const usePullToRefresh = ({
         setPullDistance(distance);
       }
     };
-    
-    const handleTouchEnd = async () => {
+      const handleTouchEnd = async () => {
       if (!isBeingTouched) return;
       
       isBeingTouched = false;
+      hasMovedSignificantly = false;
       
       // If pulled far enough, trigger refresh
       if (pullDistance > pullDownThreshold) {
@@ -134,10 +148,10 @@ export const usePullToRefresh = ({
       }
     };
     
-    // Add event listeners
-    document.addEventListener('touchstart', handleTouchStart, { passive: false });
+    // Add event listeners with better specificity
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
     document.addEventListener('touchmove', handleTouchMove, { passive: false });
-    document.addEventListener('touchend', handleTouchEnd);
+    document.addEventListener('touchend', handleTouchEnd, { passive: true });
     
     // Cleanup
     return () => {

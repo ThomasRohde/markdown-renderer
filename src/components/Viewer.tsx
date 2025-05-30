@@ -93,11 +93,72 @@ export const Viewer: React.FC<ViewerProps> = ({
     } catch (err) {
       console.error('Failed to copy link:', err);
     }
-  };
-  const handleShowQR = () => {
+  };  const handleCloseMobileActions = useCallback((e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setShowMobileActions(false);
+  }, []);
+  
+  const handleShowMobileActions = useCallback((e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setShowMobileActions(true);
+  }, []);
+  
+  const handleShowQR = useCallback((e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setShowQRModal(true);
     setShowMobileActions(false);
-  };
+  }, []);
+  
+  const handleToggleSource = useCallback((e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setShowSource(!showSource);
+    setShowMobileActions(false);
+  }, [showSource]);
+  
+  const handleToggleTOC = useCallback((e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setShowTOC(!showTOC);
+    setShowMobileActions(false);
+  }, [showTOC]);
+  
+  const handleToggleReadingModeAction = useCallback((e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (onToggleReadingMode) {
+      onToggleReadingMode();
+    }
+    setShowMobileActions(false);
+  }, [onToggleReadingMode]);
+    const handleEditAction = useCallback((e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    // Store the original markdown in localStorage for the editor to pick up
+    localStorage.setItem('editContent', originalMarkdown);
+    
+    // Navigate to editor
+    const baseUrl = window.location.origin + window.location.pathname;
+    window.location.href = baseUrl;
+    setShowMobileActions(false);
+  }, [originalMarkdown]);
   
   const handleExitReadingMode = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -167,12 +228,17 @@ export const Viewer: React.FC<ViewerProps> = ({
       )}      {/* Mobile Action Button (only in non-reading mode) - iOS style */}
       {!isReadingMode && (
         <button
-          onClick={() => setShowMobileActions(true)}
-          className="fixed bottom-16 right-4 z-40 w-14 h-14 sm:hidden bg-blue-600 rounded-full shadow-lg flex items-center justify-center text-white"
+          onClick={handleShowMobileActions}
+          className="fixed bottom-16 right-4 z-40 w-14 h-14 sm:hidden bg-blue-600 rounded-full shadow-lg flex items-center justify-center text-white transition-all duration-150 hover:bg-blue-700 active:scale-90"
           style={{
             boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25), 0 0 0 1px rgba(37, 99, 235, 0.1)',
             touchAction: 'manipulation',
-            WebkitTapHighlightColor: 'transparent'
+            WebkitTapHighlightColor: 'transparent',
+            WebkitTouchCallout: 'none',
+            WebkitUserSelect: 'none',
+            userSelect: 'none',
+            minHeight: '56px',
+            minWidth: '56px'
           }}
           aria-label="Show actions"
         >
@@ -180,10 +246,9 @@ export const Viewer: React.FC<ViewerProps> = ({
         </button>
       )}{/* Mobile Actions Drawer - iOS-style */}
       {showMobileActions && (
-        <div className="fixed inset-0 z-50 sm:hidden" aria-modal="true">
-          <div 
+        <div className="fixed inset-0 z-50 sm:hidden" aria-modal="true">          <div 
             className="absolute inset-0 bg-black bg-opacity-40 backdrop-blur-md"
-            onClick={() => setShowMobileActions(false)}
+            onClick={handleCloseMobileActions}
           ></div>
           <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-2xl shadow-xl p-4 pb-safe">
             <div className="flex justify-center mb-3">
@@ -192,10 +257,7 @@ export const Viewer: React.FC<ViewerProps> = ({
               {/* Table of Contents */}
               {tableOfContents.length > 0 && (
                 <button
-                  onClick={() => {
-                    setShowTOC(!showTOC);
-                    setShowMobileActions(false);
-                  }}
+                  onClick={handleToggleTOC}
                   className="mobile-quick-action"
                 >
                   <Menu className="w-6 h-6" />
@@ -204,10 +266,7 @@ export const Viewer: React.FC<ViewerProps> = ({
               
               {/* View Source/Document toggle */}
               <button
-                onClick={() => {
-                  setShowSource(!showSource);
-                  setShowMobileActions(false);
-                }}
+                onClick={handleToggleSource}
                 className="mobile-quick-action"
               >
                 {showSource ? 
@@ -218,10 +277,7 @@ export const Viewer: React.FC<ViewerProps> = ({
                          
               {/* Share QR */}
               <button
-                onClick={() => {
-                  handleShowQR();
-                  setShowMobileActions(false);
-                }}
+                onClick={handleShowQR}
                 className="mobile-quick-action"
               >
                 <Share2 className="w-6 h-6" />
@@ -229,12 +285,7 @@ export const Viewer: React.FC<ViewerProps> = ({
               
               {/* Reading Mode */}
               <button
-                onClick={() => {
-                  if (onToggleReadingMode) {
-                    onToggleReadingMode();
-                  }
-                  setShowMobileActions(false);
-                }}
+                onClick={handleToggleReadingModeAction}
                 className="mobile-quick-action"
               >
                 <BookOpen className="w-6 h-6" />
@@ -242,16 +293,13 @@ export const Viewer: React.FC<ViewerProps> = ({
 
               {/* Edit */}
               <button
-                onClick={() => {
-                  handleEdit();
-                  setShowMobileActions(false);
-                }}
+                onClick={handleEditAction}
                 className="mobile-quick-action"
               >
                 <Pencil className="w-6 h-6" />
               </button>
             </div>            <button
-              onClick={() => setShowMobileActions(false)}
+              onClick={handleCloseMobileActions}
               className="mt-5 w-full text-center text-sm font-medium text-gray-500 dark:text-gray-400 py-2 rounded-lg active:bg-gray-100 dark:active:bg-gray-700 touch-action-manipulation"
               style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
             >
