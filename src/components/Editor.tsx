@@ -43,7 +43,6 @@ Markdown is a lightweight markup language that allows you to write formatted con
 ### Images
 
 ![GitHub logo](https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png)  
-![Local image](./public/icon-192.png)
 
 ## Lists
 

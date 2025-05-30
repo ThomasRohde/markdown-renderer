@@ -219,18 +219,36 @@ export const Viewer: React.FC<ViewerProps> = ({
       {isReadingMode && (
         <button
           onClick={handleExitReadingMode}
-          className="reading-mode-exit-btn fixed top-4 right-4 z-50 w-14 h-14 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-full flex items-center justify-center transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 active:scale-95 active:bg-gray-100 dark:active:bg-gray-600"
+          className="reading-mode-exit-btn fixed z-50 w-14 h-14 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-full flex items-center justify-center transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 active:scale-95 active:bg-gray-100 dark:active:bg-gray-600"
+          style={{
+            top: 'max(1rem, calc(1rem + env(safe-area-inset-top)))',
+            right: 'max(1rem, calc(1rem + env(safe-area-inset-right)))',
+            minWidth: '56px',
+            minHeight: '56px',
+            touchAction: 'manipulation',
+            WebkitTapHighlightColor: 'transparent',
+            WebkitTouchCallout: 'none',
+            WebkitUserSelect: 'none',
+            userSelect: 'none',
+            transform: 'translateZ(0)',
+            WebkitBackfaceVisibility: 'hidden',
+            backfaceVisibility: 'hidden',
+            willChange: 'transform',
+            contain: 'layout style paint'
+          }}
           title="Exit reading mode"
           aria-label="Exit reading mode"
         >
           <X className="w-7 h-7 text-gray-600 dark:text-gray-300" />
         </button>
-      )}      {/* Mobile Action Button (only in non-reading mode) - iOS style */}
+      )}{/* Mobile Action Button (only in non-reading mode) - iOS style */}
       {!isReadingMode && (
         <button
           onClick={handleShowMobileActions}
-          className="fixed bottom-16 right-4 z-40 w-14 h-14 sm:hidden bg-blue-600 rounded-full shadow-lg flex items-center justify-center text-white transition-all duration-150 hover:bg-blue-700 active:scale-90"
+          className="fixed z-40 w-14 h-14 sm:hidden bg-blue-600 rounded-full shadow-lg flex items-center justify-center text-white transition-all duration-150 hover:bg-blue-700 active:scale-90"
           style={{
+            bottom: 'max(1rem, calc(4rem + env(safe-area-inset-bottom)))',
+            right: 'max(1rem, calc(1rem + env(safe-area-inset-right)))',
             boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25), 0 0 0 1px rgba(37, 99, 235, 0.1)',
             touchAction: 'manipulation',
             WebkitTapHighlightColor: 'transparent',
@@ -238,7 +256,12 @@ export const Viewer: React.FC<ViewerProps> = ({
             WebkitUserSelect: 'none',
             userSelect: 'none',
             minHeight: '56px',
-            minWidth: '56px'
+            minWidth: '56px',
+            transform: 'translateZ(0)',
+            WebkitBackfaceVisibility: 'hidden',
+            backfaceVisibility: 'hidden',
+            willChange: 'transform',
+            contain: 'layout style paint'
           }}
           aria-label="Show actions"
         >

@@ -1064,10 +1064,6 @@ button,
   min-width: 56px;
   min-height: 56px;
   
-  /* Improved positioning with safe area insets */
-  top: max(1rem, calc(1rem + env(safe-area-inset-top)));
-  right: max(1rem, calc(1rem + env(safe-area-inset-right)));
-  
   /* Clean appearance */
   -webkit-appearance: none;
   appearance: none;
@@ -1076,11 +1072,15 @@ button,
   
   /* Better shadow for depth */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  
+  /* Ensure proper positioning on all iOS devices and orientations */
+  position: fixed !important;
+  z-index: 9999 !important;
 }
 
 /* Enhanced active state for reading mode exit button */
 .reading-mode-exit-btn:active {
-  transform: scale(0.92);
+  transform: scale(0.92) translateZ(0);
   opacity: 0.8;
   transition: all 0.1s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -1117,6 +1117,34 @@ button,
     position: relative;
     z-index: 10;
   }
+  
+  /* Fixed positioning improvements for iOS Safari */
+  .reading-mode-exit-btn {
+    /* Ensure the button stays fixed during iOS Safari viewport changes */
+    position: fixed !important;
+    /* Use transform instead of top/right for better performance */
+    top: 0 !important;
+    right: 0 !important;
+    margin-top: max(1rem, calc(1rem + env(safe-area-inset-top))) !important;
+    margin-right: max(1rem, calc(1rem + env(safe-area-inset-right))) !important;
+    /* Prevent layout shifts */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+  
+  /* Mobile action button iOS positioning */
+  button[aria-label="Show actions"] {
+    /* Ensure proper bottom positioning with safe areas */
+    position: fixed !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    margin-bottom: max(1rem, calc(4rem + env(safe-area-inset-bottom))) !important;
+    margin-right: max(1rem, calc(1rem + env(safe-area-inset-right))) !important;
+    /* Prevent layout shifts and ensure smooth scrolling */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+  
   /* Add slight delay to active states to improve responsiveness */
   .mobile-quick-action:active,
   .reading-mode-exit-btn:active,
@@ -1167,5 +1195,24 @@ button,
     header .flex.items-center.space-x-3 {
       margin-bottom: 0.5rem;
     }
+    
+    /* Adjust button positions in landscape */
+    .reading-mode-exit-btn {
+      margin-top: max(0.5rem, calc(0.5rem + env(safe-area-inset-top))) !important;
+    }
+    
+    button[aria-label="Show actions"] {
+      margin-bottom: max(0.5rem, calc(2rem + env(safe-area-inset-bottom))) !important;
+    }
+  }
+  
+  /* Additional iOS fixes for scroll behavior */
+  .reading-mode-exit-btn,
+  button[aria-label="Show actions"] {
+    /* Prevent iOS from moving buttons during scroll */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    /* Ensure buttons stay on top during scroll */
+    isolation: isolate;
   }
 }
