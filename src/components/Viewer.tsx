@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { X, MoreHorizontal, BookOpen, Pencil, FileText, File, Share2 } from 'lucide-react';
+import { X, MoreHorizontal, BookOpen, Pencil, FileText, File, Share2, Menu } from 'lucide-react';
 import { useEncoding } from '../hooks/useEncoding';
 import { useMarkdown } from '../hooks/useMarkdown';
 import { usePullToRefresh } from '../hooks/usePullToRefresh';
@@ -179,8 +179,20 @@ export const Viewer: React.FC<ViewerProps> = ({
           <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-2xl shadow-xl p-4 pb-safe">
             <div className="flex justify-center mb-3">
               <div className="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
-            </div>
-            <div className="grid grid-cols-4 gap-4">
+            </div>            <div className="grid grid-cols-5 gap-4">
+              {/* Table of Contents */}
+              {tableOfContents.length > 0 && (
+                <button
+                  onClick={() => {
+                    setShowTOC(!showTOC);
+                    setShowMobileActions(false);
+                  }}
+                  className="flex flex-col items-center justify-center p-3"
+                >
+                  <Menu className="w-6 h-6" />
+                </button>
+              )}
+              
               {/* View Source/Document toggle */}
               <button
                 onClick={() => {

@@ -44,18 +44,19 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({ items, isOpen,
   if (items.length === 0) {
     return null;
   }
-  
-  return (
+    return (
     <>
-      {/* TOC Toggle Button - Hidden on mobile */}
-      <button
-        onClick={onToggle}
-        className="btn-icon-lg fixed left-4 top-1/2 transform -translate-y-1/2 z-40 hidden sm:flex"
-        title="Toggle Table of Contents"
-        aria-label="Toggle Table of Contents"
-      >
-        <Menu className="w-5 h-5" />
-      </button>      {/* TOC Panel - iOS styled for mobile */}
+      {/* TOC Toggle Button - Hidden on mobile, hidden when open */}
+      {!isOpen && (
+        <button
+          onClick={onToggle}
+          className="btn-icon-lg fixed left-4 top-1/2 transform -translate-y-1/2 z-40 hidden sm:flex"
+          title="Toggle Table of Contents"
+          aria-label="Toggle Table of Contents"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+      )}{/* TOC Panel - iOS styled for mobile */}
       {isOpen && (
         <div className={`
           fixed sm:left-4 sm:top-16 sm:bottom-16 sm:w-64 
