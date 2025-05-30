@@ -107,20 +107,13 @@ export const QRModal: React.FC<QRModalProps> = ({ isOpen, onClose, url, title = 
                     Share via Device
                   </button>
                 )}
-                
-                <button
+                  <button
                   onClick={handleCopyUrl}
                   className="btn-secondary w-full flex items-center justify-center gap-2"
                 >
                   <Copy className="w-4 h-4" />
                   Copy Link
                 </button>
-              </div>
-
-              <div className="pt-2 border-t border-gray-200 dark:border-gray-600">
-                <p className="text-xs text-gray-500 dark:text-gray-400 break-all">
-                  {url}
-                </p>
               </div>
             </div>
           )}
