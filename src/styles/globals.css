@@ -1,0 +1,21 @@
+/* Import KaTeX CSS */
+@import 'katex/dist/katex.min.css';
+
+/* Math rendering styles */
+.math-block {
+  margin: 1em 0;
+  text-align: center;
+}
+
+.math-inline {
+  display: inline;
+}
+
+.math-error {
+  color: #d73a49;
+  background-color: #ffeef0;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: monospace;
+  border: 1px solid #fdaeb7;
+}

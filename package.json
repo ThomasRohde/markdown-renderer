@@ -17,14 +17,16 @@
     "@tailwindcss/vite": "^4.1.8",
     "dompurify": "^3.2.6",
     "idb": "^8.0.3",
-    "katex": "^0.16.22",
+    "katex": "^0.16.9",
     "lucide-react": "^0.511.0",
     "marked": "^15.0.12",
     "mermaid": "^11.6.0",
     "prismjs": "^1.30.0",
     "qrcode": "^1.5.4",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "rehype-katex": "^7.0.0",
+    "remark-math": "^6.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

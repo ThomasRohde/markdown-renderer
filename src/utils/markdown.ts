@@ -2,6 +2,7 @@ import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 import mermaid from 'mermaid';
 import Prism from 'prismjs';
+import katex from 'katex';
 
 // Import common language syntaxes
 import 'prismjs/components/prism-javascript';
@@ -81,14 +82,76 @@ marked.setOptions({
 });
 
 /**
+ * Pre-processes markdown to protect math expressions from markdown parsing
+ */
+function preprocessMath(markdown: string): { processedMarkdown: string; mathStore: { [key: string]: string } } {
+  // Store math expressions to protect them from markdown processing
+  const localMathStore: { [key: string]: string } = {};
+  let counter = 0;
+  
+  // Handle block math ($$...$$) first - more specific pattern
+  markdown = markdown.replace(/\$\$([\s\S]*?)\$\$/g, (_, math) => {
+    const placeholder = `MATHBLOCK${counter++}`;
+    localMathStore[placeholder] = math.trim();
+    return `<!--MATH_${placeholder}_MATH-->`;
+  });
+  
+  // Handle inline math ($...$) - simpler pattern
+  markdown = markdown.replace(/\$([^$\r\n]+?)\$/g, (_, math) => {
+    const placeholder = `MATHINLINE${counter++}`;
+    localMathStore[placeholder] = math.trim();
+    return `<!--MATH_${placeholder}_MATH-->`;
+  });
+  
+  return { processedMarkdown: markdown, mathStore: localMathStore };
+}
+
+/**
+ * Post-processes HTML to render math expressions using KaTeX
+ */
+function postprocessMath(html: string, mathStore: { [key: string]: string }): string {
+  
+  // Render math placeholders (both block and inline)
+  html = html.replace(/<!--MATH_(MATHBLOCK\d+|MATHINLINE\d+)_MATH-->/g, (_, placeholder) => {
+    const math = mathStore[placeholder];
+    if (math) {
+      try {
+        const isBlock = placeholder.startsWith('MATHBLOCK');
+        const rendered = katex.renderToString(math, {
+          displayMode: isBlock,
+          throwOnError: false,
+        });
+        if (isBlock) {
+          return `<div class="math-block">${rendered}</div>`;
+        } else {
+          return `<span class="math-inline">${rendered}</span>`;
+        }
+      } catch (error) {
+        console.warn('KaTeX math rendering failed:', error);
+        const mathSymbol = placeholder.startsWith('MATHBLOCK') ? '$$' : '$';
+        return `<span class="math-error">${mathSymbol}${math}${mathSymbol}</span>`;
+      }
+    }
+    return `<span class="math-error">Math rendering failed</span>`;
+  });
+  
+  return html;
+}
+
+/**
  * Renders markdown to safe HTML
  */
 export function renderMarkdown(markdown: string): string {
   try {
+    // Pre-process math expressions before markdown parsing
+    const { processedMarkdown, mathStore: localMathStore } = preprocessMath(markdown);
+    
     // Parse markdown to HTML
-    const rawHtml = marked(markdown) as string;
+    const rawHtml = marked(processedMarkdown) as string;
+      // Post-process to render math expressions
+    const mathRendered = postprocessMath(rawHtml, localMathStore);
       // Sanitize HTML to prevent XSS
-    const cleanHtml = DOMPurify.sanitize(rawHtml, {
+    const cleanHtml = DOMPurify.sanitize(mathRendered, {
       ALLOWED_TAGS: [
         'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
         'p', 'br', 'hr',
@@ -101,7 +164,11 @@ export function renderMarkdown(markdown: string): string {
         'div', 'span',
         // Mermaid diagram support
         'svg', 'g', 'path', 'rect', 'circle', 'ellipse', 'line', 'polyline', 'polygon',
-        'text', 'tspan', 'defs', 'marker', 'use', 'clipPath'
+        'text', 'tspan', 'defs', 'marker', 'use', 'clipPath',
+        // KaTeX math support - KaTeX generates span elements with specific classes
+        'math', 'semantics', 'mrow', 'mi', 'mo', 'mn', 'mfrac', 'msup', 'msub', 'msubsup',
+        'munder', 'mover', 'munderover', 'mtable', 'mtr', 'mtd', 'mlabeledtr',
+        'annotation', 'annotation-xml'
       ],
       ALLOWED_ATTR: [
         'href', 'title', 'alt', 'src',
@@ -111,9 +178,13 @@ export function renderMarkdown(markdown: string): string {
         'viewBox', 'width', 'height', 'x', 'y', 'x1', 'y1', 'x2', 'y2',
         'cx', 'cy', 'r', 'rx', 'ry', 'points', 'fill', 'stroke', 'stroke-width',
         'stroke-dasharray', 'transform', 'd', 'marker-end', 'marker-start',
-        'text-anchor', 'dominant-baseline', 'font-size', 'font-family'
+        'text-anchor', 'dominant-baseline', 'font-size', 'font-family',
+        // KaTeX math attributes - KaTeX uses various attributes
+        'style', 'aria-hidden', 'role', 'data-*', 'xmlns'
       ],
-      ALLOW_DATA_ATTR: false
+      ALLOW_DATA_ATTR: true,
+      ADD_TAGS: ['katex', 'katex-display', 'katex-mathml'],
+      ADD_ATTR: ['data-katex']
     });
     
     return cleanHtml;

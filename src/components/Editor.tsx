@@ -3,51 +3,146 @@ import { useEncoding } from '../hooks/useEncoding';
 import { generateShareableLink, generateFragmentLink } from '../config/constants';
 import { renderMarkdown } from '../utils/markdown';
 
-const EXAMPLE_MARKDOWN = `# Welcome to Markdown Document Viewer
+const EXAMPLE_MARKDOWN = `# 📝 Markdown Quick Reference Guide
 
-This is a **Progressive Web Application** that lets you create and share Markdown documents instantly!
+Welcome to the **Markdown Document Viewer**! This guide will teach you Markdown syntax while showcasing this app's features.
 
-## Features
+## What is Markdown?
 
-- 🚀 **Instant sharing** via URL encoding
-- 📱 **Offline-first** PWA experience  
-- 🎨 **GitHub-flavored** Markdown support
-- 🔒 **Privacy-focused** - everything runs in your browser
+Markdown is a lightweight markup language that allows you to write formatted content using plain text. It's widely used for:
 
-## How to use
+- Documentation
+- README files
+- Forum discussions
+- Note-taking
+- Content management
 
-1. Type or paste your Markdown content below
-2. Click "Generate Link" to create a shareable URL
-3. Share the link with anyone!
+## Basic Syntax
 
-## Code Example
+### Headings
+
+# Heading 1
+## Heading 2
+### Heading 3
+#### Heading 4
+
+### Formatting
+
+**Bold text** or __also bold__  
+*Italic text* or _also italic_  
+~~Strikethrough~~ text  
+**Bold and _nested italic_** text  
+***All bold and italic*** text
+
+### Links
+
+[Visit GitHub](https://github.com)  
+[Relative link to a file](./README.md)  
+<https://www.example.com> (automatic links)
+
+### Images
+
+![GitHub logo](https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png)  
+![Local image](./public/icon-192.png)
+
+## Lists
+
+### Unordered Lists
+- First item
+- Second item
+  - Indented item
+  - Another indented item
+- Third item
+
+### Ordered Lists
+1. First step
+2. Second step
+   1. Sub-step one
+   2. Sub-step two
+3. Third step
+
+### Task Lists
+- [x] Create markdown viewer app
+- [x] Add offline support
+- [x] Add syntax highlighting
+- [ ] Add more features
+- [ ] Get user feedback
+
+## Code Examples
+
+Inline code: \`const greeting = "Hello World";\`
+
+Code block with syntax highlighting:
 
 \`\`\`javascript
+// This function greets a person by name
 function greet(name) {
   return \`Hello, \${name}!\`;
 }
 
+// Try it with different names
+console.log(greet("Markdown"));
 console.log(greet("World"));
 \`\`\`
 
-## Lists
+\`\`\`python
+# Python example
+def calculate_area(radius):
+    """Calculate the area of a circle"""
+    import math
+    return math.pi * radius ** 2
+    
+print(f"Area of circle: {calculate_area(5):.2f}")
+\`\`\`
 
-### Todo List
-- [x] Create awesome markdown viewer
-- [x] Add PWA support  
-- [ ] Add more awesome features
+## Tables
 
-### Shopping List
-1. Markdown
-2. React
-3. TypeScript
-4. ☕ Coffee
+| Feature | Description | Support |
+|---------|-------------|---------|
+| Tables | Organize data | ✅ |
+| Code Blocks | Show code with syntax highlighting | ✅ |
+| Math | LaTeX-style math formulas | ✅ |
+| Diagrams | Using Mermaid or other syntax | ⚠️ |
 
-> **Tip:** This document itself was created using the Markdown Document Viewer!
+## Blockquotes
+
+> Blockquotes are used to emphasize a section of quoted text.
+>
+> They can span multiple paragraphs.
+>> And they can be nested!
+
+## Horizontal Rules
 
 ---
 
-Ready to create your own document? Clear this text and start writing!`;
+## Advanced Features
+
+Some Markdown renderers support:
+
+### Footnotes
+
+Here's a sentence with a footnote[^1].
+
+[^1]: This is the footnote text.
+
+### Definition Lists
+
+Term
+: Definition for the term
+
+### Math Expressions (if supported)
+
+Inline math: $E=mc^2$
+
+Block math:
+
+$$
+\\frac{d}{dx}\\left( \\int_{0}^{x} f(u)\\,du\\right)=f(x)
+$$
+
+---
+
+> **Tip:** You can clear this text and start creating your own document. Click "Generate Link" when you're ready to share!`;
 
 export const Editor: React.FC = () => {
   const [content, setContent] = useState(EXAMPLE_MARKDOWN);
