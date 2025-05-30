@@ -4,6 +4,7 @@ import { Editor } from './components/Editor';
 import { Viewer } from './components/Viewer';
 import { InstallPrompt } from './components/InstallPrompt';
 import { SplashScreen } from './components/SplashScreen';
+import { PWAUpdateChecker, PWADebugInfo } from './components/PWAUpdateChecker';
 import { useTheme } from './hooks/useTheme';
 
 function App() {
@@ -58,6 +59,12 @@ function App() {
       
       {/* Install PWA Prompt */}
       <InstallPrompt />
+      
+      {/* PWA Update Checker */}
+      <PWAUpdateChecker />
+      
+      {/* PWA Debug Info (dev only) */}
+      <PWADebugInfo />
       
       {/* Mobile Splash Screen */}
       {showSplash && (

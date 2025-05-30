@@ -22,5 +22,6 @@ export const PWA_CONFIG = {
   shortName: 'MD Viewer',
   description: 'View and share Markdown documents instantly',
   themeColor: '#0969da',
-  backgroundColor: '#ffffff'
+  backgroundColor: '#ffffff',
+  version: '1.0.1' // Added version for testing updates
 };
