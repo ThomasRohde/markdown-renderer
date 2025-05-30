@@ -19,7 +19,7 @@ tools: [workspaceTerminal, githubRepo, codebase, terminalLastCommand]
    ```bash
    npm create vite@latest . -- --template react-ts
    npm i idb qrcode lucide-react
-   npm i -D vite-plugin-pwa @tailwindcss/vite canvas gh-pages @lhci/cli eslint vitest
+   npm i -D vite-plugin-pwa @tailwindcss/vite canvas gh-pages eslint vitest
    ```
 
 3. **Configure Base Setup**
@@ -74,15 +74,11 @@ tools: [workspaceTerminal, githubRepo, codebase, terminalLastCommand]
 9. **CI/CD & Deployment**
    * `.github/workflows/deploy.yml` – Modern GitHub Actions with:
      * Node.js 20, proper caching
-     * Build + Lighthouse CI integration
      * GitHub Pages deployment with proper permissions
    * `public/.nojekyll` for GitHub Pages
-   * `lighthouserc.js` with comprehensive PWA scoring
 
 10. **Quality & Testing**
     * ESLint configuration for React + TypeScript
-    * Lighthouse CI with PWA score enforcement (min 1.0)
-    * Performance, accessibility, and SEO checks
     * PWA testing utilities and validation scripts
 
 11. **Essential Features**
@@ -97,7 +93,6 @@ tools: [workspaceTerminal, githubRepo, codebase, terminalLastCommand]
     * PWA installs correctly on desktop and mobile
     * Offline functionality works completely
     * `npm run build && npm run preview` works perfectly
-    * All Lighthouse PWA criteria pass (score 100)
     * GitHub Pages deployment succeeds at `https://${githubUser}.github.io/${repoName}/`
     * Multiple PWAs can coexist (unique manifest IDs and scopes)
 
@@ -181,36 +176,9 @@ export default defineConfig({
     "preview": "vite preview",
     "deploy": "npm run build && gh-pages -d dist",
     "test": "vitest",
-    "test:pwa": "lhci autorun",
     "lint": "eslint ."
-  },
-  "homepage": "https://${githubUser}.github.io/${repoName}/"
+  },  "homepage": "https://${githubUser}.github.io/${repoName}/"
 }
-```
-
-### lighthouserc.js Template
-```javascript
-module.exports = {
-  ci: {
-    collect: {
-      url: ['http://localhost:4173/${repoName}/'],
-      startServerCommand: 'npm run preview',
-      numberOfRuns: 3,
-    },
-    assert: {
-      assertions: {
-        'categories:pwa': ['error', { minScore: 1 }],
-        'categories:performance': ['warn', { minScore: 0.9 }],
-        'categories:accessibility': ['error', { minScore: 0.95 }],
-        'categories:best-practices': ['error', { minScore: 0.95 }],
-        'categories:seo': ['warn', { minScore: 0.9 }],
-      },
-    },
-    upload: {
-      target: 'temporary-public-storage',
-    },
-  },
-};
 ```
 
 ### Tailwind CSS v4 Configuration
@@ -586,7 +554,6 @@ const useMobile = () => {
 ```
 
 **Success Criteria:**
-- ✅ 100% PWA Lighthouse score
 - ✅ Full offline functionality
 - ✅ Zero console errors/warnings
 - ✅ Automatic GitHub Pages deployment
@@ -602,7 +569,6 @@ const useMobile = () => {
 - Service worker scope and navigation fallback issues
 - Tailwind CSS v4 setup with @tailwindcss/vite plugin (not postcss)
 - Icon generation with proper dimensions and formats
-- Lighthouse CI integration in GitHub Actions
 - ESLint configuration conflicts
 - Package.json script ordering for builds
 - Missing dependencies that cause build failures

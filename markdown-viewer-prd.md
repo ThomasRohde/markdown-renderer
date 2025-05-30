@@ -185,7 +185,6 @@ The Markdown Document Viewer is an offline-first Progressive Web Application (PW
 
 **Development Dependencies:**
 - gh-pages - GitHub Pages deployment
-- @lhci/cli - Lighthouse CI for PWA auditing
 - canvas - Icon generation
 
 **Important:** Since this is a GitHub Pages project deployment, we must handle the base path `/markdown-renderer/` in all asset references and avoid client-side routing.
@@ -875,7 +874,7 @@ npm create vite@latest . -- --template react-ts
 npm i pako marked dompurify prismjs mermaid katex qrcode idb
 
 # Install PWA and build dependencies
-npm i -D vite-plugin-pwa workbox-window gh-pages canvas @lhci/cli
+npm i -D vite-plugin-pwa workbox-window gh-pages canvas
 
 # Install Tailwind CSS v4
 npm i -D tailwindcss@4 postcss autoprefixer
