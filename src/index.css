@@ -137,8 +137,8 @@ button,
 .btn-icon {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none; /* Prevents iOS callout menu */
-  -webkit-user-select: none; /* Safari */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -975,6 +975,8 @@ button,
   /* iOS style improvements */
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
   @apply transition-colors duration-150;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* iOS-specific overrides for buttons and icons */
@@ -988,44 +990,43 @@ button,
     letter-spacing: -0.01em;
     font-weight: 500;
   }
-  
-  /* Enhance focus appearance on iOS */
-  button:focus {
-    outline: none;
-  }
-  
-  /* Improve touch response on mobile */
-  .mobile-quick-action {
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-    transition: transform 0.15s ease, opacity 0.15s ease;
-  }
-  
-  .mobile-quick-action:active {
-    transform: scale(0.96);
-    opacity: 0.9;
-  }
-  
+
   /* iOS-style icon rendering */
   svg {
     shape-rendering: geometricPrecision;
   }
+}
+
+/* Reading mode exit button - iOS optimized */
+.reading-mode-exit-btn {
+  /* Enhanced touch responsiveness for iOS */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+  cursor: pointer;
   
-  /* Match iOS's native button feel with proper padding in bottom sheets */
-  .fixed.bottom-0.left-0.right-0 button {
-    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
-  }
+  /* Ensure minimum touch target for accessibility */
+  min-width: 56px;
+  min-height: 56px;
   
-  /* Ensure proper safe area insets in landscape */
-  @media (orientation: landscape) {
-    .fixed.right-4 {
-      right: max(1rem, calc(1rem + env(safe-area-inset-right)));
-    }
-    
-    .fixed.left-4 {
-      left: max(1rem, calc(1rem + env(safe-area-inset-left)));
-    }
-  }
+  /* Improved positioning with safe area insets */
+  top: max(1rem, calc(1rem + env(safe-area-inset-top)));
+  right: max(1rem, calc(1rem + env(safe-area-inset-right)));
+  
+  /* Clean appearance */
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  outline: none;
+}
+
+/* Enhanced active state for reading mode exit button */
+.reading-mode-exit-btn:active {
+  transform: scale(0.9);
+  opacity: 0.8;
+  transition: all 0.1s ease;
 }
 
 /* iPhone-specific fixes for better touch responsiveness and UI */
@@ -1039,63 +1040,20 @@ button,
   
   /* Ensure header content is not obscured by notch */
   header h1 {
-    /* Additional top padding for iPhone notch */
     margin-top: max(0, calc(env(safe-area-inset-top) * 0.1)) !important;
   }
-  
-  /* Enhanced button touch responsiveness for iPhone */
-  .btn-icon,
-  .btn-primary,
-  .btn-secondary,
-  .btn-small {
-    /* Ensure buttons work properly on iPhone */
-    -webkit-user-select: none !important;
-    user-select: none !important;
-    -webkit-tap-highlight-color: transparent !important;
-    cursor: pointer !important;
-    
-    /* Add slight delay to prevent double-tap zoom */
-    touch-action: manipulation !important;
-    
-    /* Ensure pointer events work */
-    pointer-events: auto !important;
-  }
-  
-  /* iPhone-specific button improvements */
-  .btn-icon:active,
-  .btn-primary:active,
-  .btn-secondary:active,
-  .btn-small:active {
-    /* Enhanced visual feedback on iPhone */
-    transform: scale(0.95) !important;
-    opacity: 0.8 !important;
-    transition: all 0.1s ease !important;
-  }
-  
-  /* Improve dark mode button specifically */
-  .btn-icon {
-    /* Ensure adequate touch target size */
-    min-width: 48px !important;
-    min-height: 48px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-  
+
   /* iPhone header layout improvements */
   @media (max-width: 640px) {
     header .flex.items-center.space-x-2 {
-      /* Ensure buttons don't get squished */
       min-height: 48px;
       gap: 0.75rem;
     }
     
-    /* Better spacing for iPhone */
     header .flex.items-center.space-x-3 {
       margin-bottom: 1rem;
     }
     
-    /* Fix header title truncation on iPhone */
     header h1 {
       max-width: calc(100vw - 200px) !important;
       white-space: nowrap;
@@ -1119,37 +1077,5 @@ button,
     header .flex.items-center.space-x-3 {
       margin-bottom: 0.5rem;
     }
-  }
-  
-  /* Additional iPhone-specific improvements for mobile action drawer */
-  .fixed.inset-0.z-50.sm\\:hidden {
-    /* Ensure mobile drawer works properly */
-    touch-action: none;
-  }
-  
-  .fixed.inset-0.z-50.sm\\:hidden button {
-    /* Improve button responsiveness in mobile drawer */
-    -webkit-tap-highlight-color: transparent !important;
-    touch-action: manipulation !important;
-    cursor: pointer !important;
-  }
-  
-  /* Fix mobile action button positioning */
-  .fixed.bottom-16.right-4 {
-    bottom: max(4rem, calc(4rem + env(safe-area-inset-bottom))) !important;
-    right: max(1rem, calc(1rem + env(safe-area-inset-right))) !important;
-  }
-  
-  /* Improve mobile drawer background interaction */
-  .absolute.inset-0.bg-black.bg-opacity-40 {
-    touch-action: auto !important;
-    cursor: pointer !important;
-  }
-  
-  /* Ensure drawer content is above safe area */
-  .absolute.bottom-0.left-0.right-0.bg-white {
-    padding-bottom: max(1rem, env(safe-area-inset-bottom)) !important;
-    padding-left: max(1rem, env(safe-area-inset-left)) !important;
-    padding-right: max(1rem, env(safe-area-inset-right)) !important;
   }
 }

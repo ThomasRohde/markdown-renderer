@@ -99,6 +99,14 @@ export const Viewer: React.FC<ViewerProps> = ({
     setShowMobileActions(false);
   };
   
+  const handleExitReadingMode = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onToggleReadingMode) {
+      onToggleReadingMode();
+    }
+  }, [onToggleReadingMode]);
+
   const handleEdit = () => {
     // Store the original markdown in localStorage for the editor to pick up
     localStorage.setItem('editContent', originalMarkdown);
@@ -149,27 +157,28 @@ export const Viewer: React.FC<ViewerProps> = ({
       />      {/* Reading Mode Toggle Button - iOS style */}
       {isReadingMode && (
         <button
-          onClick={onToggleReadingMode}
-          className="fixed top-4 right-4 z-50 w-12 h-12 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-full flex items-center justify-center transition-all duration-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-md hover:bg-gray-50 dark:hover:bg-gray-700"
+          onClick={handleExitReadingMode}
+          className="reading-mode-exit-btn fixed top-4 right-4 z-50 w-14 h-14 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-full flex items-center justify-center transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 active:scale-95 active:bg-gray-100 dark:active:bg-gray-600"
           title="Exit reading mode"
           aria-label="Exit reading mode"
-          style={{
-            boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08), 0px 0px 0px 1px rgba(0, 0, 0, 0.04)'
-          }}
         >
-          <X className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+          <X className="w-7 h-7 text-gray-600 dark:text-gray-300" />
         </button>
       )}      {/* Mobile Action Button (only in non-reading mode) - iOS style */}
       {!isReadingMode && (
         <button
           onClick={() => setShowMobileActions(true)}
           className="fixed bottom-16 right-4 z-40 w-14 h-14 sm:hidden bg-blue-600 rounded-full shadow-lg flex items-center justify-center text-white"
-          style={{boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25), 0 0 0 1px rgba(37, 99, 235, 0.1)'}}
+          style={{
+            boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25), 0 0 0 1px rgba(37, 99, 235, 0.1)',
+            touchAction: 'manipulation',
+            WebkitTapHighlightColor: 'transparent'
+          }}
           aria-label="Show actions"
         >
           <MoreHorizontal className="w-6 h-6" />
         </button>
-      )}      {/* Mobile Actions Drawer - iOS-style */}
+      )}{/* Mobile Actions Drawer - iOS-style */}
       {showMobileActions && (
         <div className="fixed inset-0 z-50 sm:hidden" aria-modal="true">
           <div 
@@ -187,7 +196,7 @@ export const Viewer: React.FC<ViewerProps> = ({
                     setShowTOC(!showTOC);
                     setShowMobileActions(false);
                   }}
-                  className="flex flex-col items-center justify-center p-3"
+                  className="mobile-quick-action"
                 >
                   <Menu className="w-6 h-6" />
                 </button>
@@ -199,7 +208,7 @@ export const Viewer: React.FC<ViewerProps> = ({
                   setShowSource(!showSource);
                   setShowMobileActions(false);
                 }}
-                className="flex flex-col items-center justify-center p-3"
+                className="mobile-quick-action"
               >
                 {showSource ? 
                   <File className="w-6 h-6" /> : 
@@ -213,7 +222,7 @@ export const Viewer: React.FC<ViewerProps> = ({
                   handleShowQR();
                   setShowMobileActions(false);
                 }}
-                className="flex flex-col items-center justify-center p-3"
+                className="mobile-quick-action"
               >
                 <Share2 className="w-6 h-6" />
               </button>
@@ -226,7 +235,7 @@ export const Viewer: React.FC<ViewerProps> = ({
                   }
                   setShowMobileActions(false);
                 }}
-                className="flex flex-col items-center justify-center p-3"
+                className="mobile-quick-action"
               >
                 <BookOpen className="w-6 h-6" />
               </button>
@@ -237,14 +246,14 @@ export const Viewer: React.FC<ViewerProps> = ({
                   handleEdit();
                   setShowMobileActions(false);
                 }}
-                className="flex flex-col items-center justify-center p-3"
+                className="mobile-quick-action"
               >
                 <Pencil className="w-6 h-6" />
               </button>
-            </div>
-            <button
+            </div>            <button
               onClick={() => setShowMobileActions(false)}
-              className="mt-5 w-full text-center text-sm font-medium text-gray-500 dark:text-gray-400 py-2 rounded-lg active:bg-gray-100 dark:active:bg-gray-700"
+              className="mt-5 w-full text-center text-sm font-medium text-gray-500 dark:text-gray-400 py-2 rounded-lg active:bg-gray-100 dark:active:bg-gray-700 touch-action-manipulation"
+              style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
             >
               Close
             </button>
