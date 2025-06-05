@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { useEncoding } from '../hooks/useEncoding';
 import { generateShareableLink, generateFragmentLink } from '../config/constants';
 import { renderMarkdown } from '../utils/markdown';
+import { PasswordModal } from './PasswordModal';
 
 const EXAMPLE_MARKDOWN = `# 📝 Markdown Quick Reference Guide
 
@@ -148,6 +149,9 @@ export const Editor: React.FC = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedLink, setGeneratedLink] = useState<string>('');
   const [showPreview, setShowPreview] = useState(false);
+  const [usePassword, setUsePassword] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [passwordError, setPasswordError] = useState<string>('');
   const { encode, error } = useEncoding();
 
   // Check for stored content from viewer edit action
@@ -159,15 +163,17 @@ export const Editor: React.FC = () => {
       localStorage.removeItem('editContent');
     }
   }, []);
-  const handleGenerateLink = useCallback(async () => {
+  const handleGenerateLink = useCallback(async (password?: string) => {
     if (!content.trim()) {
       alert('Please enter some content first');
       return;
     }
 
     setIsGenerating(true);
+    setPasswordError('');
+    
     try {
-      const result = await encode(content);
+      const result = await encode(content, password);
       const link = result.useFragment 
         ? generateFragmentLink(result.encoded)
         : generateShareableLink(result.encoded);
@@ -182,11 +188,28 @@ export const Editor: React.FC = () => {
       
     } catch (err) {
       console.error('Failed to generate link:', err);
-      alert(error || 'Failed to generate link');
+      if (password) {
+        setPasswordError(err instanceof Error ? err.message : 'Failed to generate link');
+      } else {
+        alert(error || 'Failed to generate link');
+      }
     } finally {
       setIsGenerating(false);
+      setShowPasswordModal(false);
     }
   }, [content, encode, error]);
+
+  const handleGenerateClick = useCallback(() => {
+    if (usePassword) {
+      setShowPasswordModal(true);
+    } else {
+      handleGenerateLink();
+    }
+  }, [usePassword, handleGenerateLink]);
+
+  const handlePasswordSubmit = useCallback((password: string) => {
+    handleGenerateLink(password);
+  }, [handleGenerateLink]);
 
   const handleClear = useCallback(() => {
     setContent('');
@@ -250,8 +273,20 @@ export const Editor: React.FC = () => {
 
       <div className="border-t border-gray-200 dark:border-gray-700 px-3 sm:px-6 py-3 sm:py-4">
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">          <div className="flex flex-wrap items-center gap-2 justify-center sm:justify-start">
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="use-password"
+                checked={usePassword}
+                onChange={(e) => setUsePassword(e.target.checked)}
+                className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+              />
+              <label htmlFor="use-password" className="text-xs sm:text-sm text-gray-700 dark:text-gray-300">
+                Password protect
+              </label>
+            </div>
             <button
-              onClick={handleGenerateLink}
+              onClick={handleGenerateClick}
               disabled={isGenerating || !content.trim()}
               className="btn-primary text-xs sm:text-sm py-2 px-4 min-h-[44px] flex items-center justify-center"
             >
@@ -294,6 +329,20 @@ export const Editor: React.FC = () => {
           </div>
         )}
       </div>
+
+      <PasswordModal
+        isOpen={showPasswordModal}
+        onClose={() => {
+          setShowPasswordModal(false);
+          setPasswordError('');
+        }}
+        onSubmit={handlePasswordSubmit}
+        title="Password Protection"
+        description="Enter a password to encrypt your document. Remember this password - it will be required to view the document."
+        submitLabel="Generate Protected Link"
+        error={passwordError}
+        isLoading={isGenerating}
+      />
     </div>
   );
 };

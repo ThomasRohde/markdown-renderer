@@ -6,6 +6,7 @@ import { usePullToRefresh } from '../hooks/usePullToRefresh';
 import { QRModal } from './QRModal';
 import { TableOfContents } from './TableOfContents';
 import { PullToRefresh } from './PullToRefresh';
+import { PasswordModal } from './PasswordModal';
 
 interface ViewerProps {
   isReadingMode?: boolean;
@@ -15,30 +16,57 @@ interface ViewerProps {
 export const Viewer: React.FC<ViewerProps> = ({ 
   isReadingMode = false, 
   onToggleReadingMode 
-}) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);  const [showSource, setShowSource] = useState(false);
+}) => {  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [showSource, setShowSource] = useState(false);
   const [originalMarkdown, setOriginalMarkdown] = useState('');
   const [showQRModal, setShowQRModal] = useState(false);
   const [showTOC, setShowTOC] = useState(false);
   const [showMobileActions, setShowMobileActions] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [passwordError, setPasswordError] = useState<string>('');
+  const [isPasswordProtected, setIsPasswordProtected] = useState(false);
   
   const { decode, getFromUrl } = useEncoding();
   const { renderedHtml, title, tableOfContents, render } = useMarkdown();
-
   // Handle document refresh for pull-to-refresh
-  const handleRefresh = useCallback(async () => {
+  const handleRefresh = useCallback(async (password?: string) => {
     try {
       const encoded = getFromUrl();
       if (encoded) {
-        const result = await decode(encoded);
+        const result = await decode(encoded, password);
         if (result.success) {
           setOriginalMarkdown(result.content);
           render(result.content);
+          setIsPasswordProtected(result.isPasswordProtected || false);
+        } else if (result.isPasswordProtected && !password) {
+          setIsPasswordProtected(true);
+          setShowPasswordModal(true);
         }
       }
     } catch (error) {
       console.error('Failed to refresh document:', error);
+    }
+  }, [decode, getFromUrl, render]);
+
+  const handlePasswordSubmit = useCallback(async (password: string) => {
+    setPasswordError('');
+    
+    const encoded = getFromUrl();
+    if (!encoded) return;
+
+    try {
+      const result = await decode(encoded, password);
+      if (result.success) {
+        setOriginalMarkdown(result.content);
+        render(result.content);
+        setShowPasswordModal(false);
+        setIsLoading(false);
+      } else {
+        setPasswordError(result.error || 'Incorrect password');
+      }
+    } catch (err) {
+      setPasswordError(err instanceof Error ? err.message : 'Unknown error');
     }
   }, [decode, getFromUrl, render]);
   
@@ -47,8 +75,7 @@ export const Viewer: React.FC<ViewerProps> = ({
     onRefresh: handleRefresh,
     pullDownThreshold: 80,
     maxPullDownDistance: 120
-  });
-  useEffect(() => {
+  });  useEffect(() => {
     const loadDocument = async () => {
       const encoded = getFromUrl();
       
@@ -63,18 +90,28 @@ export const Viewer: React.FC<ViewerProps> = ({
         if (result.success) {
           setOriginalMarkdown(result.content);
           render(result.content);
+          setIsPasswordProtected(result.isPasswordProtected || false);
+        } else if (result.isPasswordProtected) {
+          setIsPasswordProtected(true);
+          setShowPasswordModal(true);
+          // Keep loading state true until password is provided
         } else {
           setError(result.error || 'Failed to decode document');
+          setIsLoading(false);
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error');
-      } finally {
+        setIsLoading(false);
+      }
+      
+      // Only set loading to false if not waiting for password
+      if (!isPasswordProtected) {
         setIsLoading(false);
       }
     };
 
     loadDocument();
-  }, [decode, getFromUrl, render]);
+  }, [decode, getFromUrl, render, isPasswordProtected]);
 
   // Update browser tab title when document title changes
   useEffect(() => {
@@ -427,14 +464,32 @@ export const Viewer: React.FC<ViewerProps> = ({
           isOpen={showTOC}
           onToggle={() => setShowTOC(!showTOC)}
         />
-      )}
-
-      {/* QR Code Modal */}
+      )}      {/* QR Code Modal */}
       <QRModal
         isOpen={showQRModal}
         onClose={() => setShowQRModal(false)}
         url={window.location.href}
         title={title}
+      />
+
+      {/* Password Modal */}
+      <PasswordModal
+        isOpen={showPasswordModal}
+        onClose={() => {
+          setShowPasswordModal(false);
+          setPasswordError('');
+          // If user cancels password entry, treat as error
+          if (isPasswordProtected && !originalMarkdown) {
+            setError('Password required to view this document');
+            setIsLoading(false);
+          }
+        }}
+        onSubmit={handlePasswordSubmit}
+        title="Password Required"
+        description="This document is password protected. Please enter the password to view its contents."
+        submitLabel="Unlock Document"
+        error={passwordError}
+        isLoading={false}
       />
     </div>
   );

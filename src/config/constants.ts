@@ -1,6 +1,8 @@
 // Base URL configuration for GitHub Pages project deployment
 export const BASE_URL = import.meta.env.BASE_URL; // Will be '/markdown-renderer/'
-export const FULL_URL = `https://thomasrohde.github.io/markdown-renderer/`;
+export const FULL_URL = import.meta.env.DEV 
+  ? `http://localhost:5173${BASE_URL}` 
+  : `https://thomasrohde.github.io/markdown-renderer/`;
 
 // URL encoding limits
 export const URL_PARAM_LIMIT = 2000;      // Safe for all browsers

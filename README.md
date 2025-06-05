@@ -15,6 +15,7 @@ A modern, fast, and privacy-focused Progressive Web Application for creating, vi
 ### 🔥 Core Features
 - **📱 Progressive Web App** - Install on any device, works offline with install prompts
 - **🔗 Instant Sharing** - Share documents via URL encoding (no server required)
+- **🔐 Password Protection** - Encrypt documents with AES-256-GCM encryption for secure sharing
 - **🎨 GitHub-Flavored Markdown** - Full support for tables, code blocks, and more
 - **🌙 Dark Mode** - Beautiful dark/light/system theme support with automatic detection
 - **📱 Responsive Design** - Perfect on desktop, tablet, and mobile
@@ -22,6 +23,7 @@ A modern, fast, and privacy-focused Progressive Web Application for creating, vi
 
 ### 🛠️ Advanced Features
 - **💾 Offline-First** - Full functionality without internet connection
+- **🔐 Password Protection** - AES-256-GCM encryption for sensitive documents
 - **🗜️ Smart Compression** - Efficient gzip compression for large documents
 - **📋 One-Click Copy** - Copy shareable links instantly
 - **👀 Live Preview** - Side-by-side editing and preview
@@ -118,14 +120,39 @@ npm run preview
 The app uses an innovative approach to share documents:
 
 1. **Write** your markdown content in the editor
-2. **Compress** using gzip compression
-3. **Encode** to base64 for URL safety
-4. **Share** via query parameter or URL fragment
+2. **Optionally Encrypt** with password protection using AES-256-GCM
+3. **Compress** using gzip compression
+4. **Encode** to base64 for URL safety
+5. **Share** via query parameter or URL fragment
 
 ```
-Short documents: ?doc=<base64-encoded-content>
-Long documents:  #doc=<base64-encoded-content>
+Regular documents:    ?doc=<base64-encoded-content>
+Long documents:       #doc=<base64-encoded-content>
+Password protected:   ?doc=pw:<encrypted-base64-content>
+                      #doc=pw:<encrypted-base64-content>
 ```
+
+### 🔐 Password Protection
+Secure your sensitive documents with military-grade encryption:
+
+#### **Client-Side Encryption**
+- **AES-256-GCM** encryption with PBKDF2 key derivation
+- **100,000 iterations** for strong password-based key generation
+- **Random salt and IV** for each document (no rainbow table attacks)
+- **Zero server storage** - encrypted content travels in the URL
+
+#### **How to Use**
+1. **Create Document** - Write your markdown content
+2. **Enable Protection** - Click "Generate Protected Link" 
+3. **Set Password** - Enter a strong password (remember it!)
+4. **Share Securely** - Copy the generated link
+5. **Access Anywhere** - Recipients enter password to decrypt
+
+#### **Security Features**
+- **Browser-Only** - Encryption happens entirely in your browser
+- **No Server Storage** - Passwords never leave your device
+- **Forward Secrecy** - Each document uses unique cryptographic parameters
+- **Tamper Detection** - AES-GCM provides built-in integrity verification
 
 ### Mermaid Diagram Rendering
 The app now supports interactive Mermaid diagrams:
@@ -162,26 +189,75 @@ interface User {
 - **Persistent Storage** - Documents saved locally with IndexedDB
 - **Theme Persistence** - Remembers your preferred theme across sessions
 
+## 🔐 Password Protection Feature
+
+### Overview
+Protect your sensitive markdown documents with industry-standard AES-256-GCM encryption. Perfect for confidential notes, private documentation, secure team communication, and sensitive content sharing.
+
+### Security Specifications
+- **Encryption Algorithm**: AES-256-GCM (Galois/Counter Mode)
+- **Key Derivation**: PBKDF2 with SHA-256
+- **Iterations**: 100,000 (OWASP recommended minimum)
+- **Salt**: 128-bit random salt per document
+- **IV/Nonce**: 96-bit random initialization vector
+- **Integrity**: Built-in authentication and tamper detection
+
+### How to Use Password Protection
+
+#### **Creating Protected Documents**
+1. **Write Content** - Create your markdown document
+2. **Enable Protection** - Click "Generate Protected Link" button
+3. **Set Password** - Enter a strong password in the modal
+4. **Generate Link** - System encrypts and creates shareable URL
+5. **Share Securely** - Copy the link and share with intended recipients
+
+#### **Accessing Protected Documents**
+1. **Open Link** - Click or navigate to the protected document URL
+2. **Enter Password** - System prompts for the protection password
+3. **Decrypt & View** - Document is decrypted and displayed locally
+4. **Security Validation** - Invalid passwords are rejected immediately
+
+### Security Best Practices
+- **Strong Passwords** - Use complex passwords with mixed characters
+- **Secure Sharing** - Share passwords through separate, secure channels
+- **Limited Access** - Only share with intended recipients
+- **Password Management** - Use a password manager for complex passwords
+- **Regular Updates** - Consider re-encrypting sensitive documents periodically
+
+### Browser Compatibility
+- **Chrome/Edge 37+** - Full support for Web Crypto API
+- **Firefox 34+** - Complete encryption functionality
+- **Safari 8+** - Full compatibility on macOS and iOS
+- **Mobile Browsers** - Works on all modern mobile browsers
+- **Graceful Fallback** - Clear error messages for unsupported browsers
+
 ## 🎯 Use Cases
 
 ### 🎓 Education & Documentation
 - Share lecture notes instantly with QR codes
+- **Secure student assignments** with password-protected documents
 - Create interactive tutorials with Mermaid diagrams
 - Distribute assignments with syntax-highlighted code examples
 - Collaborative note-taking with persistent storage
+- **Confidential course materials** protected by encryption
 - Technical documentation with auto-generated table of contents
 
 ### 💼 Professional & Development
 - Technical specifications with diagram support
+- **Confidential project proposals** with password protection
 - Project proposals with rich formatting
 - Code snippets with multi-language syntax highlighting
+- **Secure team communication** with encrypted sharing
 - Team communication with shareable QR codes
+- **Protected API documentation** for sensitive systems
 - API documentation with structured navigation
 
 ### 🌐 Content Creation & Sharing
 - Blog post drafts with live preview
+- **Protected drafts and private content** with encryption
 - README files with enhanced markdown features
 - Change logs with proper formatting
+- **Secure internal documentation** with password access
 - Release notes with visual diagrams
 - Mobile-friendly sharing via QR codes
 
@@ -189,9 +265,12 @@ interface User {
 
 - **No Data Collection** - Zero tracking, analytics, or data harvesting
 - **Client-Side Only** - All processing happens in your browser
+- **Military-Grade Encryption** - AES-256-GCM for password-protected documents
 - **XSS Protection** - DOMPurify sanitizes all rendered content including SVG diagrams
 - **Local Storage** - Documents stored locally in IndexedDB, never transmitted
 - **No External Dependencies** - Works completely offline after initial load
+- **Password Security** - Passwords never leave your device or stored anywhere
+- **Cryptographic Security** - PBKDF2 with 100,000 iterations, random salts and IVs
 - **Open Source** - Full transparency, inspect the code yourself
 - **Secure Sharing** - URLs contain compressed content, no server storage required
 
@@ -252,6 +331,7 @@ src/
 │   ├── Viewer.tsx          # Document viewer with TOC
 │   ├── TableOfContents.tsx # Auto-generated navigation
 │   ├── QRModal.tsx         # QR code generation modal
+│   ├── PasswordModal.tsx   # Password protection dialog
 │   └── InstallPrompt.tsx   # PWA installation prompt
 ├── hooks/                  # Custom React hooks
 │   ├── useEncoding.ts      # URL encoding/decoding
@@ -259,7 +339,8 @@ src/
 │   ├── useTheme.ts         # Theme management
 │   └── usePWA.ts          # PWA installation handling
 ├── utils/                  # Utility functions
-│   ├── encoding.ts         # Compression utilities
+│   ├── encoding.ts         # Compression & encryption utilities
+│   ├── crypto.ts           # AES-256-GCM encryption functions
 │   ├── markdown.ts         # Markdown rendering with Prism & Mermaid
 │   ├── storage.ts          # IndexedDB storage management
 │   └── qrcode.ts          # QR code generation
@@ -280,11 +361,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - 📑 **Auto Table of Contents** - Generated from headings with smooth scrolling
 - 🌙 **Advanced Theme System** - Light/dark/system theme with persistence
 - 📱 **QR Code Sharing** - Generate QR codes for easy mobile access
+- 🔐 **Password Protection** - AES-256-GCM encryption for sensitive documents
 - 💾 **IndexedDB Storage** - Persistent local document and settings storage
 - 🔧 **Enhanced PWA Features** - Better install prompts and offline support
 - 🎯 **Auto-Generated IDs** - Headings get IDs for deep linking and navigation
 - 🛠️ **Improved Editor** - Better auto-save and document management
-- 🔒 **Enhanced Security** - Extended XSS protection for SVG content
+- 🔒 **Enhanced Security** - Military-grade encryption and extended XSS protection
 
 ### Phase 1 - Core Foundation
 - 📝 **Basic Markdown Rendering** - GitHub-flavored markdown support

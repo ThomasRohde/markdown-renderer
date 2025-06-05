@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react';
-import { encodeMarkdown, decodeMarkdown, getDocumentFromUrl, updateUrlWithDocument } from '../utils/encoding';
+import { encodeMarkdown, encodeMarkdownWithPassword, decodeMarkdown, decodeMarkdownWithPassword, getDocumentFromUrl, updateUrlWithDocument } from '../utils/encoding';
 import type { EncodingResult, DecodingResult } from '../utils/encoding';
 
 export interface UseEncodingReturn {
-  encode: (markdown: string) => Promise<EncodingResult>;
-  decode: (encoded: string) => Promise<DecodingResult>;
+  encode: (markdown: string, password?: string) => Promise<EncodingResult>;
+  decode: (encoded: string, password?: string) => Promise<DecodingResult>;
   getFromUrl: () => string | null;
   updateUrl: (encoded: string, useFragment: boolean) => void;
   isLoading: boolean;
@@ -14,13 +14,14 @@ export interface UseEncodingReturn {
 export function useEncoding(): UseEncodingReturn {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const encode = useCallback(async (markdown: string): Promise<EncodingResult> => {
+  const encode = useCallback(async (markdown: string, password?: string): Promise<EncodingResult> => {
     setIsLoading(true);
     setError(null);
     
     try {
-      const result = encodeMarkdown(markdown);
+      const result = password 
+        ? await encodeMarkdownWithPassword(markdown, password)
+        : encodeMarkdown(markdown);
       return result;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown encoding error';
@@ -31,12 +32,15 @@ export function useEncoding(): UseEncodingReturn {
     }
   }, []);
 
-  const decode = useCallback(async (encoded: string): Promise<DecodingResult> => {
+  const decode = useCallback(async (encoded: string, password?: string): Promise<DecodingResult> => {
     setIsLoading(true);
     setError(null);
     
     try {
-      const result = decodeMarkdown(encoded);
+      const result = password 
+        ? await decodeMarkdownWithPassword(encoded, password)
+        : decodeMarkdown(encoded);
+      
       if (!result.success) {
         setError(result.error || 'Decoding failed');
       }
