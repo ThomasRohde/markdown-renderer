@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 interface PullToRefreshOptions {
   onRefresh: () => Promise<void>;
@@ -13,24 +13,27 @@ export const usePullToRefresh = ({
 }: PullToRefreshOptions) => {
   const [isPulling, setIsPulling] = useState(false);
   const [pullDistance, setPullDistance] = useState(0);
+  const pullDistanceRef = useRef(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [velocity, setVelocity] = useState(0);
-  const [lastY, setLastY] = useState(0);
-  const [lastTime, setLastTime] = useState(0);
 
-  // Calculate velocity for momentum effect
-  const calculateVelocity = useCallback((currentY: number, currentTime: number) => {
-    if (lastY && lastTime) {
-      const deltaY = currentY - lastY;
-      const deltaTime = currentTime - lastTime;
-      return deltaY / deltaTime;
-    }
-    return 0;
-  }, [lastY, lastTime]);
+  // Use refs to track motion data without triggering rerenders
+  const velocityRef = useRef(0);
+  const lastYRef = useRef(0);
+  const lastTimeRef = useRef(0);
+
   useEffect(() => {
     let startY = 0;
     let isBeingTouched = false;
     let hasMovedSignificantly = false;
+
+    const calculateVelocity = (currentY: number, currentTime: number) => {
+      if (lastYRef.current && lastTimeRef.current) {
+        const deltaY = currentY - lastYRef.current;
+        const deltaTime = currentTime - lastTimeRef.current;
+        return deltaY / deltaTime;
+      }
+      return 0;
+    };
     
     const handleTouchStart = (e: TouchEvent) => {
       // Only enable pull-to-refresh if we're at the top of the document
@@ -46,9 +49,9 @@ export const usePullToRefresh = ({
         isBeingTouched = true;
         hasMovedSignificantly = false;
         startY = e.touches[0].clientY;
-        setLastY(startY);
-        setLastTime(e.timeStamp);
-        setVelocity(0);
+        lastYRef.current = startY;
+        lastTimeRef.current = e.timeStamp;
+        velocityRef.current = 0;
       }
     };
     
@@ -60,9 +63,9 @@ export const usePullToRefresh = ({
       
       // Calculate current velocity
       const currentVelocity = calculateVelocity(currentY, e.timeStamp);
-      setVelocity(currentVelocity);
-      setLastY(currentY);
-      setLastTime(e.timeStamp);
+      velocityRef.current = currentVelocity;
+      lastYRef.current = currentY;
+      lastTimeRef.current = e.timeStamp;
       
       // Only track significant movement to avoid interfering with taps
       if (Math.abs(distance) > 10) {
@@ -92,6 +95,7 @@ export const usePullToRefresh = ({
         }
         
         setPullDistance(distance);
+        pullDistanceRef.current = distance;
       }
     };
       const handleTouchEnd = async () => {
@@ -101,7 +105,7 @@ export const usePullToRefresh = ({
       hasMovedSignificantly = false;
       
       // If pulled far enough, trigger refresh
-      if (pullDistance > pullDownThreshold) {
+      if (pullDistanceRef.current > pullDownThreshold) {
         setIsRefreshing(true);
         try {
           await onRefresh();
@@ -113,13 +117,13 @@ export const usePullToRefresh = ({
       }
       
       // Apply momentum-based animation
-      const momentum = Math.abs(velocity) > 0.5;
+      const momentum = Math.abs(velocityRef.current) > 0.5;
       if (momentum) {
-        const duration = Math.min(400, Math.abs(velocity * 100));
+        const duration = Math.min(400, Math.abs(velocityRef.current * 100));
         const finalDistance = 0;
         
         // Animate with momentum
-        const startDistance = pullDistance;
+        const startDistance = pullDistanceRef.current;
         const startTime = performance.now();
         
         const animate = (currentTime: number) => {
@@ -131,11 +135,13 @@ export const usePullToRefresh = ({
           const current = startDistance - (startDistance * easing);
           
           setPullDistance(current);
+          pullDistanceRef.current = current;
           
           if (progress < 1) {
             requestAnimationFrame(animate);
           } else {
             setPullDistance(finalDistance);
+            pullDistanceRef.current = finalDistance;
             setIsPulling(false);
           }
         };
@@ -144,7 +150,9 @@ export const usePullToRefresh = ({
       } else {
         // Reset pull distance without momentum
         setPullDistance(0);
+        pullDistanceRef.current = 0;
         setIsPulling(false);
+        velocityRef.current = 0;
       }
     };
     
@@ -159,7 +167,7 @@ export const usePullToRefresh = ({
       document.removeEventListener('touchmove', handleTouchMove);
       document.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [maxPullDownDistance, onRefresh, pullDistance, pullDownThreshold, calculateVelocity, velocity]);
+  }, [maxPullDownDistance, onRefresh, pullDownThreshold]);
   
   return { isPulling, pullDistance, isRefreshing };
 };
