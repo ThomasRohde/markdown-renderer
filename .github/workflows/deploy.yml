@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest    
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,11 +25,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
+          
       - name: Clean install dependencies
         run: |
           rm -rf node_modules package-lock.json
-          npm ci --ignore-scripts
+          npm install --ignore-scripts
 
       - name: Rebuild native dependencies
         run: npm rebuild
