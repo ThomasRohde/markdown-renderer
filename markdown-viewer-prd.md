@@ -126,7 +126,6 @@ The Markdown Document Viewer is an offline-first Progressive Web Application (PW
 
 **Sharing Features:**
 - QR code generation for document URLs
-- Native share API integration
 - Copy link with one click
 - Short URL generation (using fragment encoding)
 

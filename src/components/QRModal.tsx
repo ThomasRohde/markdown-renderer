@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { X, Share2, Copy } from 'lucide-react';
+import { X, Copy } from 'lucide-react';
 import { generateQRCode } from '../utils/qrcode';
 
 interface QRModalProps {
@@ -42,18 +42,6 @@ export const QRModal: React.FC<QRModalProps> = ({ isOpen, onClose, url, title = 
     }
   };
 
-  const handleNativeShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: title,
-          url: url,
-        });
-      } catch (err) {
-        console.error('Native share failed:', err);
-      }
-    }
-  };
 
   if (!isOpen) return null;
   return (    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4 backdrop-blur-md">
@@ -98,18 +86,9 @@ export const QRModal: React.FC<QRModalProps> = ({ isOpen, onClose, url, title = 
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Scan with your phone camera to view this document
               </p>              <div className="space-y-2">
-                {'share' in navigator && (
-                  <button
-                    onClick={handleNativeShare}
-                    className="btn-primary w-full flex items-center justify-center gap-2"
-                  >
-                    <Share2 className="w-4 h-4" />
-                    Share via Device
-                  </button>
-                )}
-                  <button
+                <button
                   onClick={handleCopyUrl}
-                  className="btn-secondary w-full flex items-center justify-center gap-2"
+                  className="btn-primary w-full flex items-center justify-center gap-2"
                 >
                   <Copy className="w-4 h-4" />
                   Copy Link
